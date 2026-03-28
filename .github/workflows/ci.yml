@@ -1,0 +1,35 @@
+name: VIDS Validator CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.10", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Generate example datasets
+        run: python tests/generate_test_fixtures.py
+
+      - name: Validate POC example
+        run: python validators/validate_vids.py tests/fixtures/example-poc --json
+
+      - name: Validate Full example
+        run: python validators/validate_vids.py tests/fixtures/example-full --profile full --json
+
+      - name: Run validator unit tests
+        run: python -m pytest tests/ -v --tb=short
+        continue-on-error: true

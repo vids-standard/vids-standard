@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test outputs
+*.pyc
+.pytest_cache/
+
+# Archives
+*.zip
+*.tar.gz
+
+# NIfTI test stubs (don't commit large binary files)
+# Real datasets should use Git LFS or external storage
