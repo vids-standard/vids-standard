@@ -4,6 +4,7 @@
 [![License: CC BY 4.0](https://img.shields.io/badge/Spec-CC%20BY%204.0-lightgrey)](LICENSE)
 [![License: Apache 2.0](https://img.shields.io/badge/Tools-Apache%202.0-green)](LICENSE-TOOLS)
 [![Validator](https://img.shields.io/badge/validator-21%20rules-orange)](validators/validate_vids.py)
+[![PyPI](https://img.shields.io/pypi/v/vids-validator)](https://pypi.org/project/vids-validator/)
 [![CI](https://github.com/vids-standard/vids-standard/actions/workflows/ci.yml/badge.svg)](https://github.com/vids-standard/vids-standard/actions/workflows/ci.yml)
 
 **An open standard for structuring, validating, and delivering annotated medical imaging datasets for AI/ML development.**
@@ -23,21 +24,44 @@ Medical imaging AI teams waste weeks untangling datasets that arrive as ZIP file
 
 ## Quick Start
 
-### Validate an existing dataset
+### Install the validator
 
 ```bash
-# Clone the repo
-git clone https://github.com/vids-standard/vids-standard.git
-cd vids-standard
+pip install vids-validator
+```
 
-# Run the validator (zero dependencies — just Python 3.8+)
-python validators/validate_vids.py /path/to/your/dataset
+Zero dependencies. Python 3.8+.
+
+### Validate a dataset
+
+```bash
+# Auto-detect profile from .vids marker
+vids-validate /path/to/your/dataset
 
 # Full profile validation
-python validators/validate_vids.py /path/to/your/dataset --profile full
+vids-validate /path/to/your/dataset --profile full
 
 # JSON output for CI pipelines
-python validators/validate_vids.py /path/to/your/dataset --json
+vids-validate /path/to/your/dataset --json
+```
+
+### Or run from source
+
+```bash
+git clone https://github.com/vids-standard/vids-standard.git
+cd vids-standard
+python validators/validate_vids.py /path/to/your/dataset
+```
+
+### Python API
+
+```python
+from vids_validator import VIDSValidator
+
+validator = VIDSValidator("/path/to/dataset", profile="auto")
+report = validator.validate()
+
+print(report["Summary"]["Status"])  # "PASS" or "FAIL"
 ```
 
 ### Minimum viable dataset (POC profile)
@@ -78,7 +102,7 @@ See [EXAMPLES.md](EXAMPLES.md) for complete, copy-pasteable JSON for every file.
 
 ## Validator
 
-The reference validator (`validators/validate_vids.py`) is a single-file, zero-dependency Python script that checks all 21 rules:
+The reference validator is available as a [PyPI package](https://pypi.org/project/vids-validator/) and as a single-file script (`validators/validate_vids.py`). Both are zero-dependency Python — nothing to install beyond the standard library.
 
 | Category | Rules | Scope |
 |----------|-------|-------|
