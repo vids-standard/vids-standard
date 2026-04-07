@@ -9,7 +9,7 @@
 | **Date** | 2026-02-16 |
 | **Authors** | Princeton Medical Systems |
 | **License** | CC BY 4.0 (Specification/Docs) / Apache-2.0 (Tools) |
-| **Canonical URL** | https://vids.ai/spec/1.0 |
+| **Canonical URL** | https://vidsstandard.org/spec/1.0 |
 
 ---
 
@@ -1241,7 +1241,7 @@ vids_version: 1.0
   author  = {{Princeton Medical Systems}},
   year    = {2026},
   version = {1.0},
-  url     = {https://vids.ai/spec/1.0}
+  url     = {https://vidsstandard.org/spec/1.0}
 }
 ```
 

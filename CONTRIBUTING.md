@@ -62,7 +62,7 @@ We welcome export/loader contributions for ML frameworks (nnU-Net, MONAI, TorchI
 
 ### Project Roles
 
-**Steering Committee** — Responsible for reviewing and merging pull requests, deciding on spec changes and version increments, and managing releases and the canonical URL (vids.ai). The Steering Committee currently consists of Princeton Medical Systems, the original authors of VIDS. As the community grows, additional seats will be added to ensure representation from academic, clinical, and industry stakeholders.
+**Steering Committee** — Responsible for reviewing and merging pull requests, deciding on spec changes and version increments, and managing releases and the canonical URL (vidsstandard.org). The Steering Committee currently consists of Princeton Medical Systems, the original authors of VIDS. As the community grows, additional seats will be added to ensure representation from academic, clinical, and industry stakeholders.
 
 **Maintainers** — Individuals with merge access to the repository. All current Steering Committee members are maintainers. External contributors can become maintainers (see below).
 
@@ -109,7 +109,7 @@ Be professional and constructive. We're building a standard for medical AI — t
 ## Contact
 
 - **GitHub Issues** — Preferred for all technical discussions
-- **Email** — info@princetonmed.systems (for partnership or governance inquiries)
+- **Email** — standards@vidsstandard.org (for partnership or governance inquiries)
 
 ---
 

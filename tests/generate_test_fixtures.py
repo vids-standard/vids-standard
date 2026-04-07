@@ -80,7 +80,7 @@ def create_poc(root: Path):
         '## Contents\n\n'
         '- 1 subject, 1 session, CT modality\n'
         '- Segmentation annotation with provenance\n\n'
-        '## Contact\n\ninfo@princetonmed.systems\n')
+        '## Contact\n\nstandards@vidsstandard.org\n')
 
     # Imaging
     img_dir = root / 'sub-001' / 'ses-baseline' / 'ct'

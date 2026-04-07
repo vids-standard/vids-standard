@@ -83,7 +83,7 @@ Validator test fixture and reference for VIDS POC profile compliance.
 
 ## Contact
 
-info@princetonmed.systems
+standards@vidsstandard.org
 ```
 
 ### `sub-001/ses-baseline/ct/sub-001_ses-baseline_ct_img.json`
