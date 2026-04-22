@@ -38,6 +38,8 @@ Dr. Joan S. Muthu, John Shalen — Princeton Medical Systems
 
 Four major public datasets (LIDC-IDRI, BraTS, CheXpert, Medical Segmentation Decathlon) scored against 22 VIDS compliance dimensions. Average: 29%. Provenance: 8%. The paper presents the full spec design, the compliance analysis, and LIDC-Hybrid-100 — a 100-subject VIDS-compliant reference CT dataset published on [Zenodo](https://doi.org/10.5281/zenodo.19582717).
 
+Compliance analysis data: [vids-benchmarks](https://github.com/vids-standard/vids-benchmarks)
+
 ---
 
 ## Why VIDS?
@@ -197,6 +199,6 @@ We welcome contributions — spec clarifications, validator improvements, new mo
 
 ---
 
-**VIDS was created by [Princeton Medical Systems](https://princetonmed.systems) and is maintained as an open community standard.**
+**VIDS was created by [Princeton Medical Systems](https://princetonmedicalsystems.com) and is maintained as an open community standard.**
 
 **Contact:** standards@vidsstandard.org
