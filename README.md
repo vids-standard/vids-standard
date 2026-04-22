@@ -30,6 +30,16 @@ vids-validate my-dataset/ --profile full
 
 ---
 
+## Paper
+
+**VIDS: A Verified Imaging Dataset Standard for Medical AI**
+Dr. Joan S. Muthu, John Shalen — Princeton Medical Systems
+[arXiv:2604.17525](https://arxiv.org/abs/2604.17525)
+
+Four major public datasets (LIDC-IDRI, BraTS, CheXpert, Medical Segmentation Decathlon) scored against 22 VIDS compliance dimensions. Average: 29%. Provenance: 8%. The paper presents the full spec design, the compliance analysis, and LIDC-Hybrid-100 — a 100-subject VIDS-compliant reference CT dataset published on [Zenodo](https://doi.org/10.5281/zenodo.19582717).
+
+---
+
 ## Why VIDS?
 
 Medical imaging AI teams waste weeks untangling datasets that arrive as ZIP files full of unnamed NIfTIs and undocumented annotations. Nobody knows who annotated what, when, or whether anyone reviewed it. VIDS eliminates this:
@@ -174,12 +184,14 @@ We welcome contributions — spec clarifications, validator improvements, new mo
 ## Citation
 
 ```bibtex
-@misc{vids2026,
-  title   = {VIDS: Verified Imaging Dataset Standard, Specification v1.0},
-  author  = {{Princeton Medical Systems}},
+@misc{muthu2026vids,
+  title   = {VIDS: A Verified Imaging Dataset Standard for Medical AI},
+  author  = {Muthu, Joan S. and Shalen, John},
   year    = {2026},
-  version = {1.0},
-  url     = {https://vidsstandard.org/spec/1.0}
+  eprint  = {2604.17525},
+  archivePrefix = {arXiv},
+  primaryClass  = {eess.IV},
+  url     = {https://arxiv.org/abs/2604.17525}
 }
 ```
 
