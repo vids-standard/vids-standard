@@ -3,7 +3,7 @@
 [![VIDS Version](https://img.shields.io/badge/VIDS-v1.0-blue)](SPEC.md)
 [![PyPI](https://img.shields.io/pypi/v/vids-validator)](https://pypi.org/project/vids-validator/)
 [![License: CC BY 4.0](https://img.shields.io/badge/Spec-CC%20BY%204.0-lightgrey)](LICENSE)
-[![License: Apache 2.0](https://img.shields.io/badge/Tools-Apache%202.0-green)](LICENSE-TOOLS)
+[![License: Apache 2.0](https://img.shields.io/badge/Tools-Apache%202.0-green)](LICENSE-Apache-2.0.txt)
 [![Validator](https://img.shields.io/badge/validator-21%20rules-orange)](validators/validate_vids.py)
 [![CI](https://github.com/vids-standard/vids-standard/actions/workflows/ci.yml/badge.svg)](https://github.com/vids-standard/vids-standard/actions/workflows/ci.yml)
 
@@ -181,7 +181,7 @@ We welcome contributions — spec clarifications, validator improvements, new mo
 ## License
 
 - **Specification and documentation:** [CC BY 4.0](LICENSE)
-- **Tools and reference implementations:** [Apache 2.0](LICENSE-TOOLS)
+- **Tools and reference implementations:** [Apache 2.0](LICENSE-Apache-2.0.txt)
 
 ## Citation
 
