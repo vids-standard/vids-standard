@@ -201,6 +201,267 @@ def create_full(root: Path):
     })
 
 
+def create_classification(root: Path):
+    """Create a POC-profile dataset with a _cls.json (classification) annotation."""
+    root.mkdir(parents=True, exist_ok=True)
+
+    write_text(root / '.vids', 'profile: poc\nvids_version: 1.0\n')
+
+    write_json(root / 'dataset_description.json', {
+        "Name": "Example Classification Dataset",
+        "VIDSVersion": "1.0",
+        "DatasetVersion": "1.0.0",
+        "License": "CC BY 4.0",
+        "Description": "Minimal single-subject POC dataset with image-level classification.",
+        "Authors": ["VIDS Examples Working Group"]
+    })
+
+    write_json(root / 'participants.json', {
+        "VIDSVersion": "1.0",
+        "Participants": [
+            {"SubjectID": "sub-001", "Age": 55, "Sex": "F",
+             "DataSource": "Synthetic example"}
+        ]
+    })
+
+    write_text(root / 'README.md',
+        '# Example Classification Dataset\n\n'
+        'Minimal VIDS-compliant dataset for CI validation.\n\n'
+        '## Contents\n\n'
+        '- 1 subject, 1 session, fundus modality\n'
+        '- Classification annotation with provenance\n\n'
+        '## Contact\n\nstandards@vidsstandard.org\n')
+
+    img_dir = root / 'sub-001' / 'ses-baseline' / 'fundus'
+    create_nifti_stub(img_dir / 'sub-001_ses-baseline_fundus_img.nii.gz')
+    write_json(img_dir / 'sub-001_ses-baseline_fundus_img.json', {
+        "VIDSVersion": "1.0",
+        "SourceFormat": "DICOM",
+        "ConversionTool": "dcm2niix v1.0.20240202",
+        "ConversionDate": "2026-02-10"
+    })
+
+    ann_dir = root / 'derivatives' / 'annotations' / 'sub-001' / 'ses-baseline' / 'fundus'
+    write_json(ann_dir / 'sub-001_ses-baseline_fundus_cls.json', {
+        "VIDSVersion": "1.0",
+        "AnnotationType": "classification",
+        "SourceImage": "sub-001_ses-baseline_fundus_img.nii.gz",
+        "Classifications": [
+            {"SubjectID": "sub-001", "Label": "no_dr", "Confidence": 0.92}
+        ],
+        "Provenance": {
+            "Annotator": {
+                "ID": "rater_001",
+                "Name": "Dr. Jane Smith",
+                "Credentials": "MD, Board-certified ophthalmologist"
+            },
+            "AnnotationProcess": {
+                "Tool": "VIDS-CLS-Tool",
+                "ToolVersion": "0.1.0",
+                "Date": "2026-02-12",
+                "Method": "Manual classification"
+            }
+        }
+    })
+
+
+def create_detection(root: Path):
+    """Create a POC-profile dataset with a _bbox.json (detection) annotation."""
+    root.mkdir(parents=True, exist_ok=True)
+
+    write_text(root / '.vids', 'profile: poc\nvids_version: 1.0\n')
+
+    write_json(root / 'dataset_description.json', {
+        "Name": "Example Detection Dataset",
+        "VIDSVersion": "1.0",
+        "DatasetVersion": "1.0.0",
+        "License": "CC BY 4.0",
+        "Description": "Minimal single-subject POC dataset with bounding-box detection annotations.",
+        "Authors": ["VIDS Examples Working Group"]
+    })
+
+    write_json(root / 'participants.json', {
+        "VIDSVersion": "1.0",
+        "Participants": [
+            {"SubjectID": "sub-001", "Age": 48, "Sex": "M",
+             "DataSource": "Synthetic example"}
+        ]
+    })
+
+    write_text(root / 'README.md',
+        '# Example Detection Dataset\n\n'
+        'Minimal VIDS-compliant dataset for CI validation.\n\n'
+        '## Contents\n\n'
+        '- 1 subject, 1 session, xr modality\n'
+        '- Bounding-box detection annotation with provenance\n\n'
+        '## Contact\n\nstandards@vidsstandard.org\n')
+
+    img_dir = root / 'sub-001' / 'ses-baseline' / 'xr'
+    create_nifti_stub(img_dir / 'sub-001_ses-baseline_xr_img.nii.gz')
+    write_json(img_dir / 'sub-001_ses-baseline_xr_img.json', {
+        "VIDSVersion": "1.0",
+        "SourceFormat": "DICOM",
+        "ConversionTool": "dcm2niix v1.0.20240202",
+        "ConversionDate": "2026-02-10"
+    })
+
+    ann_dir = root / 'derivatives' / 'annotations' / 'sub-001' / 'ses-baseline' / 'xr'
+    write_json(ann_dir / 'sub-001_ses-baseline_xr_bbox.json', {
+        "VIDSVersion": "1.0",
+        "AnnotationType": "bbox",
+        "SourceImage": "sub-001_ses-baseline_xr_img.nii.gz",
+        "CoordinateSystem": "voxels",
+        "BoundingBoxes": [
+            {"SubjectID": "sub-001", "Label": "lesion",
+             "Coords": {"x": 5, "y": 5, "z": 0, "w": 10, "h": 10, "d": 1}}
+        ],
+        "Provenance": {
+            "Annotator": {
+                "ID": "rater_001",
+                "Name": "Dr. Alex Lee",
+                "Credentials": "MD, Board-certified radiologist"
+            },
+            "AnnotationProcess": {
+                "Tool": "VIDS-BBox-Tool",
+                "ToolVersion": "0.1.0",
+                "Date": "2026-02-12",
+                "Method": "Manual bounding-box annotation"
+            }
+        }
+    })
+
+
+def create_landmark(root: Path):
+    """Create a POC-profile dataset with a _lm.json (landmark) annotation."""
+    root.mkdir(parents=True, exist_ok=True)
+
+    write_text(root / '.vids', 'profile: poc\nvids_version: 1.0\n')
+
+    write_json(root / 'dataset_description.json', {
+        "Name": "Example Landmark Dataset",
+        "VIDSVersion": "1.0",
+        "DatasetVersion": "1.0.0",
+        "License": "CC BY 4.0",
+        "Description": "Minimal single-subject POC dataset with anatomical landmark annotations.",
+        "Authors": ["VIDS Examples Working Group"]
+    })
+
+    write_json(root / 'participants.json', {
+        "VIDSVersion": "1.0",
+        "Participants": [
+            {"SubjectID": "sub-001", "Age": 35, "Sex": "F",
+             "DataSource": "Synthetic example"}
+        ]
+    })
+
+    write_text(root / 'README.md',
+        '# Example Landmark Dataset\n\n'
+        'Minimal VIDS-compliant dataset for CI validation.\n\n'
+        '## Contents\n\n'
+        '- 1 subject, 1 session, mr modality\n'
+        '- Landmark annotation with provenance\n\n'
+        '## Contact\n\nstandards@vidsstandard.org\n')
+
+    img_dir = root / 'sub-001' / 'ses-baseline' / 'mr'
+    create_nifti_stub(img_dir / 'sub-001_ses-baseline_mr_img.nii.gz')
+    write_json(img_dir / 'sub-001_ses-baseline_mr_img.json', {
+        "VIDSVersion": "1.0",
+        "SourceFormat": "DICOM",
+        "ConversionTool": "dcm2niix v1.0.20240202",
+        "ConversionDate": "2026-02-10"
+    })
+
+    ann_dir = root / 'derivatives' / 'annotations' / 'sub-001' / 'ses-baseline' / 'mr'
+    write_json(ann_dir / 'sub-001_ses-baseline_mr_lm.json', {
+        "VIDSVersion": "1.0",
+        "AnnotationType": "landmark",
+        "SourceImage": "sub-001_ses-baseline_mr_img.nii.gz",
+        "CoordinateSystem": "voxels",
+        "Landmarks": [
+            {"Name": "anterior_commissure", "Coords": {"x": 12, "y": 8, "z": 0}}
+        ],
+        "Provenance": {
+            "Annotator": {
+                "ID": "rater_001",
+                "Name": "Dr. Morgan Rivera",
+                "Credentials": "MD, Board-certified neuroradiologist"
+            },
+            "AnnotationProcess": {
+                "Tool": "VIDS-LM-Tool",
+                "ToolVersion": "0.1.0",
+                "Date": "2026-02-12",
+                "Method": "Manual landmark placement"
+            }
+        }
+    })
+
+
+def create_roi(root: Path):
+    """Create a POC-profile dataset with a _roi.json (region-of-interest) annotation."""
+    root.mkdir(parents=True, exist_ok=True)
+
+    write_text(root / '.vids', 'profile: poc\nvids_version: 1.0\n')
+
+    write_json(root / 'dataset_description.json', {
+        "Name": "Example ROI Dataset",
+        "VIDSVersion": "1.0",
+        "DatasetVersion": "1.0.0",
+        "License": "CC BY 4.0",
+        "Description": "Minimal single-subject POC dataset with polygon ROI annotations.",
+        "Authors": ["VIDS Examples Working Group"]
+    })
+
+    write_json(root / 'participants.json', {
+        "VIDSVersion": "1.0",
+        "Participants": [
+            {"SubjectID": "sub-001", "Age": 70, "Sex": "M",
+             "DataSource": "Synthetic example"}
+        ]
+    })
+
+    write_text(root / 'README.md',
+        '# Example ROI Dataset\n\n'
+        'Minimal VIDS-compliant dataset for CI validation.\n\n'
+        '## Contents\n\n'
+        '- 1 subject, 1 session, ct modality\n'
+        '- ROI polygon annotation with provenance\n\n'
+        '## Contact\n\nstandards@vidsstandard.org\n')
+
+    img_dir = root / 'sub-001' / 'ses-baseline' / 'ct'
+    create_nifti_stub(img_dir / 'sub-001_ses-baseline_ct_img.nii.gz')
+    write_json(img_dir / 'sub-001_ses-baseline_ct_img.json', {
+        "VIDSVersion": "1.0",
+        "SourceFormat": "DICOM",
+        "ConversionTool": "dcm2niix v1.0.20240202",
+        "ConversionDate": "2026-02-10"
+    })
+
+    ann_dir = root / 'derivatives' / 'annotations' / 'sub-001' / 'ses-baseline' / 'ct'
+    write_json(ann_dir / 'sub-001_ses-baseline_ct_roi.json', {
+        "VIDSVersion": "1.0",
+        "AnnotationType": "roi",
+        "SourceImage": "sub-001_ses-baseline_ct_img.nii.gz",
+        "CoordinateSystem": "voxels",
+        "Regions": [
+            {"Name": "liver_segment_7",
+             "Polygon": [[5, 5, 0], [15, 5, 0], [15, 15, 0], [5, 15, 0]]}
+        ],
+        "Provenance": {
+            "Annotator": {
+                "ID": "rater_001",
+                "Name": "Dr. Casey Park",
+                "Credentials": "MD, Board-certified abdominal radiologist"
+            },
+            "AnnotationProcess": {
+                "Tool": "VIDS-ROI-Tool",
+                "ToolVersion": "0.1.0",
+                "Date": "2026-02-12",
+                "Method": "Manual polygon ROI"
+            }
+        }
+    })
+
+
 if __name__ == '__main__':
     import shutil
     # Clean previous fixtures
@@ -209,7 +470,15 @@ if __name__ == '__main__':
 
     create_poc(FIXTURES_DIR / 'example-poc')
     create_full(FIXTURES_DIR / 'example-full')
+    create_classification(FIXTURES_DIR / 'example-classification')
+    create_detection(FIXTURES_DIR / 'example-detection')
+    create_landmark(FIXTURES_DIR / 'example-landmark')
+    create_roi(FIXTURES_DIR / 'example-roi')
 
     print(f"✅ Test fixtures generated in {FIXTURES_DIR}")
-    print(f"   example-poc/  — POC profile")
-    print(f"   example-full/ — Full profile")
+    print(f"   example-poc/            — POC profile (seg)")
+    print(f"   example-full/           — Full profile (seg)")
+    print(f"   example-classification/ — POC profile (cls)")
+    print(f"   example-detection/      — POC profile (bbox)")
+    print(f"   example-landmark/       — POC profile (lm)")
+    print(f"   example-roi/            — POC profile (roi)")
