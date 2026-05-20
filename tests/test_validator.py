@@ -168,3 +168,35 @@ class TestScaffolding:
         assert result.returncode != 0
         assert "invalid choice" in result.stderr
         assert not (tmp_path / "test-bad").exists()
+
+
+class TestNegativeFixtures:
+    def test_empty_annotations_fails_a002(self):
+        report, code = run_validator(FIXTURES / "negative" / "empty-annotations")
+        assert report["Summary"]["Status"] == "FAIL"
+        assert code != 0
+        assert any(e.startswith("A002:") for e in report["Errors"])
+
+    def test_unpaired_seg_fails_a003(self):
+        report, code = run_validator(FIXTURES / "negative" / "unpaired-seg")
+        assert report["Summary"]["Status"] == "FAIL"
+        assert code != 0
+        assert any(e.startswith("A003:") for e in report["Errors"])
+
+    def test_malformed_cls_fails_a004(self):
+        report, code = run_validator(FIXTURES / "negative" / "malformed-cls")
+        assert report["Summary"]["Status"] == "FAIL"
+        assert code != 0
+        assert any(e.startswith("A004:") for e in report["Errors"])
+
+    def test_missing_version_fails_a004(self):
+        report, code = run_validator(FIXTURES / "negative" / "missing-version")
+        assert report["Summary"]["Status"] == "FAIL"
+        assert code != 0
+        assert any(e.startswith("A004:") for e in report["Errors"])
+
+    def test_missing_provenance_fails_a005(self):
+        report, code = run_validator(FIXTURES / "negative" / "missing-provenance")
+        assert report["Summary"]["Status"] == "FAIL"
+        assert code != 0
+        assert any(e.startswith("A005:") for e in report["Errors"])

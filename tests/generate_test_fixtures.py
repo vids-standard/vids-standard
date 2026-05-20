@@ -462,6 +462,111 @@ def create_roi(root: Path):
     })
 
 
+def _create_negative_base(root: Path) -> Path:
+    """Create a valid POC scaffold (subject, session, imaging, empty annotations dir).
+
+    Returns the annotation directory so the caller can plant its intentional
+    defect (a missing pair, a malformed JSON, etc.) without re-emitting the rest.
+    """
+    root.mkdir(parents=True, exist_ok=True)
+    write_text(root / '.vids', 'profile: poc\nvids_version: 1.0\n')
+    write_json(root / 'dataset_description.json', {
+        "Name": "Negative Test Fixture",
+        "VIDSVersion": "1.0",
+        "DatasetVersion": "1.0.0",
+        "License": "CC BY 4.0",
+        "Description": "Intentionally malformed for validator negative tests.",
+        "Authors": ["VIDS Examples Working Group"]
+    })
+    write_json(root / 'participants.json', {
+        "VIDSVersion": "1.0",
+        "Participants": [
+            {"SubjectID": "sub-001", "Age": 40, "Sex": "F",
+             "DataSource": "Synthetic example"}
+        ]
+    })
+    write_text(root / 'README.md',
+        '# Negative Test Fixture\n\nIntentionally malformed for validator negative tests.\n')
+    img_dir = root / 'sub-001' / 'ses-baseline' / 'ct'
+    create_nifti_stub(img_dir / 'sub-001_ses-baseline_ct_img.nii.gz')
+    write_json(img_dir / 'sub-001_ses-baseline_ct_img.json', {
+        "VIDSVersion": "1.0",
+        "SourceFormat": "DICOM",
+        "ConversionTool": "dcm2niix v1.0.20240202",
+        "ConversionDate": "2026-02-10"
+    })
+    ann_dir = root / 'derivatives' / 'annotations' / 'sub-001' / 'ses-baseline' / 'ct'
+    ann_dir.mkdir(parents=True, exist_ok=True)
+    return ann_dir
+
+
+def _good_provenance() -> dict:
+    """Realistic populated provenance block reused across negative fixtures
+    that need a valid Provenance to isolate the intended failure rule."""
+    return {
+        "Annotator": {
+            "ID": "rater_001",
+            "Name": "Dr. Jane Smith",
+            "Credentials": "MD"
+        },
+        "AnnotationProcess": {
+            "Tool": "VIDS-CLS-Tool",
+            "ToolVersion": "0.1.0",
+            "Date": "2026-02-12",
+            "Method": "Manual classification"
+        }
+    }
+
+
+def create_negative_fixtures(parent_root: Path):
+    """Create the negative-test fixture set under parent_root.
+
+    Each subdirectory is a valid POC structure with exactly one intentional
+    defect that targets a specific A-rule failure:
+      empty-annotations/   → A002 FAIL (annotations dir exists but empty)
+      unpaired-seg/        → A003 FAIL (_seg.nii.gz without paired _seg.json)
+      malformed-cls/       → A004 FAIL (_cls.json contains invalid JSON)
+      missing-version/     → A004 FAIL (_cls.json missing VIDSVersion)
+      missing-provenance/  → A005 FAIL (_cls.json missing populated Provenance)
+    """
+    # empty-annotations: annotations dir created by the helper, no files added
+    _create_negative_base(parent_root / 'empty-annotations')
+
+    # unpaired-seg: seg binary present, no paired sidecar
+    ann_dir = _create_negative_base(parent_root / 'unpaired-seg')
+    create_nifti_stub(ann_dir / 'sub-001_ses-baseline_ct_seg.nii.gz')
+
+    # malformed-cls: not valid JSON
+    ann_dir = _create_negative_base(parent_root / 'malformed-cls')
+    write_text(ann_dir / 'sub-001_ses-baseline_ct_cls.json',
+               '{ this is not valid JSON ::: \n')
+
+    # missing-version: valid JSON, populated Provenance, no VIDSVersion field
+    ann_dir = _create_negative_base(parent_root / 'missing-version')
+    write_json(ann_dir / 'sub-001_ses-baseline_ct_cls.json', {
+        "AnnotationType": "classification",
+        "SourceImage": "sub-001_ses-baseline_ct_img.nii.gz",
+        "Classifications": [
+            {"SubjectID": "sub-001", "Label": "no_dr", "Confidence": 0.92}
+        ],
+        "Provenance": _good_provenance()
+    })
+
+    # missing-provenance: valid JSON, has VIDSVersion, Annotator and
+    # AnnotationProcess both empty (neither ID/Name nor Tool/Date populated)
+    ann_dir = _create_negative_base(parent_root / 'missing-provenance')
+    write_json(ann_dir / 'sub-001_ses-baseline_ct_cls.json', {
+        "VIDSVersion": "1.0",
+        "AnnotationType": "classification",
+        "SourceImage": "sub-001_ses-baseline_ct_img.nii.gz",
+        "Classifications": [],
+        "Provenance": {
+            "Annotator": {},
+            "AnnotationProcess": {}
+        }
+    })
+
+
 if __name__ == '__main__':
     import shutil
     # Clean previous fixtures
@@ -474,6 +579,7 @@ if __name__ == '__main__':
     create_detection(FIXTURES_DIR / 'example-detection')
     create_landmark(FIXTURES_DIR / 'example-landmark')
     create_roi(FIXTURES_DIR / 'example-roi')
+    create_negative_fixtures(FIXTURES_DIR / 'negative')
 
     print(f"✅ Test fixtures generated in {FIXTURES_DIR}")
     print(f"   example-poc/            — POC profile (seg)")
@@ -482,3 +588,4 @@ if __name__ == '__main__':
     print(f"   example-detection/      — POC profile (bbox)")
     print(f"   example-landmark/       — POC profile (lm)")
     print(f"   example-roi/            — POC profile (roi)")
+    print(f"   negative/               — 5 intentionally malformed fixtures")
