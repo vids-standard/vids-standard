@@ -10,6 +10,10 @@ Usage:
     vids-init my-dataset --subjects 50 --modality mr --profile full
     vids-init my-dataset --subjects 5 --modality ct --session baseline followup
     vids-init my-dataset --subjects 3 --modality ct mr --profile full
+    vids-init my-dataset --subjects 50 --modality fundus --annotation-type cls
+    vids-init my-dataset --subjects 30 --modality xr --annotation-type bbox
+    vids-init my-dataset --subjects 20 --modality mr --annotation-type lm
+    vids-init my-dataset --subjects 10 --modality ct --annotation-type roi
 
 Zero dependencies beyond Python 3.8+ standard library.
 """
@@ -61,6 +65,28 @@ def zero_pad(n, total):
     return str(n).zfill(width)
 
 
+def _placeholder_provenance(date_str):
+    """Return a populated-but-placeholder provenance block for JSON-only annotation scaffolds.
+
+    Uses TODO_ prefixes so scaffolded values are obviously not real but the
+    validator's presence checks (A005) still pass. Used by the cls/bbox/lm/roi
+    branches; the seg branch retains its richer current provenance.
+    """
+    return {
+        "Annotator": {
+            "ID": "TODO_annotator_id",
+            "Name": "TODO Annotator Name",
+            "Credentials": "TODO: credentials and experience"
+        },
+        "AnnotationProcess": {
+            "Tool": "TODO: annotation tool",
+            "ToolVersion": "TODO: tool version",
+            "Date": date_str,
+            "Method": "TODO: annotation method"
+        }
+    }
+
+
 def scaffold_dataset(args):
     """Create the complete VIDS dataset scaffold."""
     root = Path(args.name).resolve()
@@ -75,6 +101,14 @@ def scaffold_dataset(args):
     n_subjects = args.subjects
     modalities = args.modality
     sessions = args.session
+    ann_type = args.annotation_type
+    ann_type_label = {
+        "seg": "segmentation",
+        "cls": "classification",
+        "bbox": "bounding boxes",
+        "lm": "landmarks",
+        "roi": "regions of interest",
+    }[ann_type]
     dataset_name = args.dataset_name or args.name
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
@@ -83,6 +117,7 @@ def scaffold_dataset(args):
     print(f"  Subjects:   {n_subjects}")
     print(f"  Sessions:   {', '.join(sessions)}")
     print(f"  Modalities: {', '.join(modalities)}")
+    print(f"  Annotation: {ann_type}")
     print()
 
     # ── .vids marker ────────────────────────────────────────
@@ -131,7 +166,7 @@ TODO: Describe your dataset in detail.
 - {n_subjects} subjects
 - Sessions: {', '.join(sessions)}
 - Modalities: {', '.join(m.upper() for m in modalities)}
-- Annotation type: segmentation
+- Annotation type: {ann_type_label}
 
 ## VIDS Compliance
 
@@ -161,7 +196,7 @@ TODO: Add citation guidance
 
 ## [1.0.0] - {today}
 - Initial release
-- {n_subjects} subjects with segmentation annotations
+- {n_subjects} subjects with {ann_type_label} annotations
 """)
     print(f"  ✅ CHANGES.md")
 
@@ -202,40 +237,76 @@ TODO: Add citation guidance
 
                 # Annotation files
                 ann_dir = root / "derivatives" / "annotations" / sub_id / ses_id / mod
-                create_nifti_stub(ann_dir / f"{stem}_seg.nii.gz")
 
-                write_json(ann_dir / f"{stem}_seg.json", {
-                    "VIDSVersion": "1.0",
-                    "AnnotationType": "segmentation",
-                    "Description": "TODO: What was annotated",
-                    "SourceImage": f"{stem}_img.nii.gz",
-                    "LabelMap": {
-                        "0": "background",
-                        "1": "TODO: class name (e.g., tumor, nodule, organ)"
-                    },
-                    "Provenance": {
-                        "Annotator": {
-                            "ID": "TODO: annotator_001",
-                            "Name": "TODO: Dr. Name",
-                            "Credentials": "TODO: e.g., MD, Board-certified radiologist",
-                            "Specialty": "TODO"
+                if ann_type == 'seg':
+                    create_nifti_stub(ann_dir / f"{stem}_seg.nii.gz")
+
+                    write_json(ann_dir / f"{stem}_seg.json", {
+                        "VIDSVersion": "1.0",
+                        "AnnotationType": "segmentation",
+                        "Description": "TODO: What was annotated",
+                        "SourceImage": f"{stem}_img.nii.gz",
+                        "LabelMap": {
+                            "0": "background",
+                            "1": "TODO: class name (e.g., tumor, nodule, organ)"
                         },
-                        "AnnotationProcess": {
-                            "Tool": "TODO: e.g., 3D Slicer",
-                            "ToolVersion": "TODO: e.g., 5.6.2",
-                            "Date": today,
-                            "TimeSpent_minutes": "TODO",
-                            "Method": "TODO: Manual segmentation | Semi-automated | Automated with review"
-                        },
-                        "QualityControl": {
-                            "ReviewedBy": "TODO: reviewer_001",
-                            "ReviewDate": "TODO",
-                            "ReviewOutcome": "TODO: approved | revisions_requested | rejected"
+                        "Provenance": {
+                            "Annotator": {
+                                "ID": "TODO: annotator_001",
+                                "Name": "TODO: Dr. Name",
+                                "Credentials": "TODO: e.g., MD, Board-certified radiologist",
+                                "Specialty": "TODO"
+                            },
+                            "AnnotationProcess": {
+                                "Tool": "TODO: e.g., 3D Slicer",
+                                "ToolVersion": "TODO: e.g., 5.6.2",
+                                "Date": today,
+                                "TimeSpent_minutes": "TODO",
+                                "Method": "TODO: Manual segmentation | Semi-automated | Automated with review"
+                            },
+                            "QualityControl": {
+                                "ReviewedBy": "TODO: reviewer_001",
+                                "ReviewDate": "TODO",
+                                "ReviewOutcome": "TODO: approved | revisions_requested | rejected"
+                            }
                         }
-                    }
-                })
+                    })
+                elif ann_type == 'cls':
+                    write_json(ann_dir / f"{stem}_cls.json", {
+                        "VIDSVersion": "1.0",
+                        "AnnotationType": "classification",
+                        "SourceImage": f"{stem}_img.nii.gz",
+                        "Classifications": [],
+                        "Provenance": _placeholder_provenance(today)
+                    })
+                elif ann_type == 'bbox':
+                    write_json(ann_dir / f"{stem}_bbox.json", {
+                        "VIDSVersion": "1.0",
+                        "AnnotationType": "bbox",
+                        "SourceImage": f"{stem}_img.nii.gz",
+                        "CoordinateSystem": "voxels",
+                        "BoundingBoxes": [],
+                        "Provenance": _placeholder_provenance(today)
+                    })
+                elif ann_type == 'lm':
+                    write_json(ann_dir / f"{stem}_lm.json", {
+                        "VIDSVersion": "1.0",
+                        "AnnotationType": "landmark",
+                        "SourceImage": f"{stem}_img.nii.gz",
+                        "CoordinateSystem": "voxels",
+                        "Landmarks": [],
+                        "Provenance": _placeholder_provenance(today)
+                    })
+                elif ann_type == 'roi':
+                    write_json(ann_dir / f"{stem}_roi.json", {
+                        "VIDSVersion": "1.0",
+                        "AnnotationType": "roi",
+                        "SourceImage": f"{stem}_img.nii.gz",
+                        "Regions": [],
+                        "Provenance": _placeholder_provenance(today)
+                    })
 
-                file_count += 4  # 2 NIfTI + 2 JSON per subject/session/modality
+                file_count += 4 if ann_type == 'seg' else 3
 
     print(f"  ✅ {n_subjects} subjects x {len(sessions)} sessions x "
           f"{len(modalities)} modalities = {file_count} files")
@@ -331,7 +402,10 @@ TODO: Add citation guidance
     print(f"Profile: {profile.upper()}")
     print(f"{'=' * 50}")
     print(f"\nNext steps:")
-    print(f"  1. Replace NIfTI stubs with your actual imaging and segmentation data")
+    if ann_type == 'seg':
+        print(f"  1. Replace NIfTI stubs with your actual imaging and segmentation data")
+    else:
+        print(f"  1. Replace NIfTI stubs with your actual imaging data")
     print(f"  2. Fill in TODO fields in all JSON files")
     print(f"  3. Validate: vids-validate {root.name}/ --profile {profile}")
     print(f"\nEvery JSON file contains TODO markers for fields you need to fill in.")
@@ -353,6 +427,10 @@ def main():
                         help="Session names, e.g., baseline followup (default: baseline)")
     parser.add_argument("--profile", choices=["poc", "full"], default="poc",
                         help="VIDS profile (default: poc)")
+    parser.add_argument("--annotation-type",
+                        choices=["seg", "cls", "bbox", "lm", "roi"],
+                        default="seg",
+                        help="Annotation paradigm to scaffold (default: seg for backward compatibility)")
     parser.add_argument("--dataset-name",
                         help="Human-readable dataset name (default: directory name)")
     args = parser.parse_args()
