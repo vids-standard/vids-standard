@@ -36,10 +36,10 @@ class VIDSValidator:
         ('I004', 'filename_convention',    'Files follow VIDS naming convention'),
         # Annotation rules (A001-A005)
         ('A001', 'annotation_directory',   'derivatives/annotations/ exists'),
-        ('A002', 'annotation_files',       'Segmentation files present for annotated subjects'),
-        ('A003', 'annotation_sidecars',    'Annotation sidecar JSONs present'),
-        ('A004', 'annotation_json_valid',  'Annotation JSONs valid and contain required fields'),
-        ('A005', 'provenance_complete',    'Provenance fields populated (Annotator, Tool, Date)'),
+        ('A002', 'annotation_files',       'At least one annotation file (_seg/_cls/_bbox/_lm/_roi) present'),
+        ('A003', 'annotation_sidecars',    'Binary annotations have paired sidecars; JSON-only annotations are self-sidecared'),
+        ('A004', 'annotation_json_valid',  'All annotation sidecars are valid JSON with VIDSVersion'),
+        ('A005', 'provenance_complete',    'All annotation sidecars have populated Provenance (Annotator, AnnotationProcess)'),
         # Quality rules (Q001-Q003) - Full profile only
         ('Q001', 'quality_directory',      'quality/ directory exists (Full profile)'),
         ('Q002', 'quality_summary',        'quality_summary.json present (Full profile)'),
@@ -49,6 +49,15 @@ class VIDSValidator:
         ('M002', 'ml_splits',             'ml/splits.json present (Full profile)'),
         # Metadata rules (D001)
         ('D001', 'changes_file',           'CHANGES.md exists'),
+    ]
+
+    ANNOTATION_PATTERNS = [
+        '*_seg.nii.gz', '*_seg.nii',
+        '*_cls.json', '*_bbox.json', '*_lm.json', '*_roi.json',
+    ]
+    SIDECAR_PATTERNS = [
+        '*_seg.json',
+        '*_cls.json', '*_bbox.json', '*_lm.json', '*_roi.json',
     ]
 
     def __init__(self, dataset_path: str, profile: str = 'auto'):
@@ -222,32 +231,54 @@ class VIDSValidator:
         if not annot_root.is_dir():
             self._skip('A002', 'No annotations directory')
             return
-        segs = list(annot_root.rglob('*_seg.nii.gz')) + list(annot_root.rglob('*_seg.nii'))
-        if segs:
-            self._pass('A002', f'{len(segs)} segmentation files found')
+        annotations = []
+        for pattern in self.ANNOTATION_PATTERNS:
+            annotations.extend(annot_root.rglob(pattern))
+        if annotations:
+            by_type = {'seg': 0, 'cls': 0, 'bbox': 0, 'lm': 0, 'roi': 0}
+            for f in annotations:
+                for t in by_type:
+                    if f'_{t}.' in f.name:
+                        by_type[t] += 1
+                        break
+            detected = ', '.join(f'{n} {t}' for t, n in by_type.items() if n > 0)
+            self._pass('A002', f'Annotations found ({detected})')
         else:
-            self._fail('A002', 'No segmentation files in derivatives/annotations/')
+            self._fail('A002', 'No annotation files found in derivatives/annotations/')
 
     def check_annotation_sidecars(self):
         annot_root = self.dataset_path / 'derivatives' / 'annotations'
         if not annot_root.is_dir():
             self._skip('A003', 'No annotations directory')
             return
-        jsons = list(annot_root.rglob('*_seg.json'))
-        if jsons:
-            self._pass('A003', f'{len(jsons)} annotation sidecar JSONs found')
+        seg_binaries = list(annot_root.rglob('*_seg.nii.gz')) + list(annot_root.rglob('*_seg.nii'))
+        missing_sidecars = []
+        for binary in seg_binaries:
+            stem = binary.name.replace('.nii.gz', '').replace('.nii', '')
+            expected_sidecar = binary.parent / f'{stem}.json'
+            if not expected_sidecar.exists():
+                missing_sidecars.append(binary.name)
+        json_only = []
+        for pattern in ['*_cls.json', '*_bbox.json', '*_lm.json', '*_roi.json']:
+            json_only.extend(annot_root.rglob(pattern))
+        if missing_sidecars:
+            self._fail('A003', f'{len(missing_sidecars)} segmentation files missing paired sidecars: {", ".join(missing_sidecars[:3])}')
+        elif seg_binaries or json_only:
+            self._pass('A003', 'All annotation files have required sidecars')
         else:
-            self._fail('A003', 'No annotation sidecar JSONs found')
+            self._skip('A003', 'No annotation files to check')
 
     def check_annotation_json_valid(self):
         annot_root = self.dataset_path / 'derivatives' / 'annotations'
         if not annot_root.is_dir():
             self._skip('A004', 'No annotations directory')
             return
-        jsons = list(annot_root.rglob('*_seg.json'))
+        all_sidecars = []
+        for pattern in self.SIDECAR_PATTERNS:
+            all_sidecars.extend(annot_root.rglob(pattern))
         invalid = []
         missing_fields = []
-        for jf in jsons:
+        for jf in all_sidecars:
             data = self._load_json(jf)
             if data is None:
                 invalid.append(jf.name)
@@ -257,8 +288,8 @@ class VIDSValidator:
             self._fail('A004', f"{len(invalid)} invalid annotation JSONs")
         elif missing_fields:
             self._fail('A004', f"{len(missing_fields)} JSONs missing VIDSVersion")
-        elif jsons:
-            self._pass('A004', f'{len(jsons)} annotation JSONs valid')
+        elif all_sidecars:
+            self._pass('A004', f'{len(all_sidecars)} annotation JSONs valid')
         else:
             self._skip('A004', 'No annotation JSONs to check')
 
@@ -267,9 +298,11 @@ class VIDSValidator:
         if not annot_root.is_dir():
             self._skip('A005', 'No annotations directory')
             return
-        jsons = list(annot_root.rglob('*_seg.json'))
+        all_sidecars = []
+        for pattern in self.SIDECAR_PATTERNS:
+            all_sidecars.extend(annot_root.rglob(pattern))
         incomplete = []
-        for jf in jsons:
+        for jf in all_sidecars:
             data = self._load_json(jf)
             if data is None:
                 continue
@@ -285,7 +318,7 @@ class VIDSValidator:
                 incomplete.append(jf.name)
         if incomplete:
             self._fail('A005', f"{len(incomplete)} files with incomplete provenance: {', '.join(incomplete[:3])}")
-        elif jsons:
+        elif all_sidecars:
             self._pass('A005', 'All annotations have complete provenance')
         else:
             self._skip('A005', 'No annotations to check')
@@ -365,7 +398,7 @@ class VIDSValidator:
 
         return {
             'VIDSVersion': '1.0',
-            'ValidatorVersion': '1.1',
+            'ValidatorVersion': '1.2',
             'DatasetPath': str(self.dataset_path),
             'Profile': self.profile,
             'ValidationDate': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
