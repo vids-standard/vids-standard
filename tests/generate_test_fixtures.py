@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 """
 Generate minimal VIDS test fixture datasets for CI validation.
-Creates example-poc and example-full datasets with NIfTI stubs.
+
+Produces under tests/fixtures/:
+  example-poc/, example-full/                  — segmentation (POC + Full)
+  example-classification/, example-detection/  — POC profile (_cls / _bbox)
+  example-landmark/, example-roi/              — POC profile (_lm / _roi)
+  negative/                                    — 5 intentionally malformed
+                                                 fixtures for A002-A005
+
+All fixtures are NIfTI-stub-based and disposable; regenerate anytime.
 """
 
 import json

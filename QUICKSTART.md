@@ -60,6 +60,26 @@ my-first-dataset/
         └── sub-003/ ...
 ```
 
+### Scaffolding a different annotation type
+
+The default scaffold creates a segmentation dataset (`_seg.nii.gz` masks paired with JSON sidecars). For classification, detection, landmark, or ROI workflows, pass `--annotation-type`:
+
+| Flag | Generates | Fits |
+|---|---|---|
+| `--annotation-type seg` (default) | NIfTI mask + JSON sidecar | Tumor, organ, lesion masks |
+| `--annotation-type cls` | `_cls.json` with `Classifications: []` | Image-level labels |
+| `--annotation-type bbox` | `_bbox.json` with `BoundingBoxes: []` | Object detection |
+| `--annotation-type lm` | `_lm.json` with `Landmarks: []` | Anatomical landmarks |
+| `--annotation-type roi` | `_roi.json` with `Regions: []` | Polygon regions |
+
+Example — classification scaffold for a fundus dataset:
+
+```bash
+python vids_init.py my-fundus-dataset --subjects 50 --modality fundus --annotation-type cls
+```
+
+All five paradigms produce validator-passing scaffolds out of the box. Pick the one that matches how you'll annotate your data; the rest of this tutorial uses `seg`.
+
 ## Step 3: Validate immediately (1 minute)
 
 The scaffold passes validation right out of the box:
@@ -82,8 +102,8 @@ You should see:
   ✅ I003: 3 imaging JSONs valid
   ✅ I004: All files follow VIDS naming convention
   ✅ A001: derivatives/annotations/ exists
-  ✅ A002: 3 segmentation files found
-  ✅ A003: 3 annotation sidecar JSONs found
+  ✅ A002: Annotations found (3 seg)
+  ✅ A003: All annotation files have required sidecars
   ✅ A004: 3 annotation JSONs valid
   ✅ A005: All annotations have complete provenance
 
@@ -262,7 +282,7 @@ grep -r "TODO" my-first-dataset/ --include="*.json" --include="*.md"
 
 **"dataset_description.json missing fields"** — Make sure all 6 required fields are present: `Name`, `VIDSVersion`, `DatasetVersion`, `License`, `Description`, `Authors`.
 
-**"No segmentation files found"** — Your `_seg.nii.gz` files must be under `derivatives/annotations/`, not in the subject directories.
+**"No annotation files found in derivatives/annotations/"** — Your annotation files (`_seg.nii.gz`, `_cls.json`, `_bbox.json`, `_lm.json`, or `_roi.json`) must be under `derivatives/annotations/`, not in the subject directories.
 
 **"Incomplete provenance"** — Each `_seg.json` needs at minimum: `Provenance.Annotator.ID` (or `.Name`) AND `Provenance.AnnotationProcess.Date` (or `.Tool`).
 
