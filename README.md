@@ -1,7 +1,7 @@
 # VIDS — Verified Imaging Dataset Standard
 
 [![VIDS Version](https://img.shields.io/badge/VIDS-v1.0-blue)](SPEC.md)
-[![PyPI](https://img.shields.io/pypi/v/vids-validator)](https://pypi.org/project/vids-validator/)
+[![PyPI](https://img.shields.io/pypi/v/vids-validator?prefix=v&label=pypi&color=blue)](https://pypi.org/project/vids-validator/)
 [![License: CC BY 4.0](https://img.shields.io/badge/Spec-CC%20BY%204.0-lightgrey)](LICENSE)
 [![License: Apache 2.0](https://img.shields.io/badge/Tools-Apache%202.0-green)](LICENSE-Apache-2.0.txt)
 [![Validator](https://img.shields.io/badge/validator-21%20rules-orange)](validators/validate_vids.py)

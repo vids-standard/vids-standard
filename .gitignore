@@ -33,3 +33,4 @@ Thumbs.db
 
 # NIfTI test stubs (don't commit large binary files)
 # Real datasets should use Git LFS or external storage
+tests/fixtures/
