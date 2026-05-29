@@ -1,6 +1,6 @@
 # VIDS Compliance Analysis: Methodology Reference
 
-This document records the methodology used in the compliance analysis presented in Section 5 of the VIDS v1.0 paper (Muthu and Shalen, 2026, arXiv:2604.17525). It addresses the reference in footnote 1 of Section 5.3 ("Per dimension scoring criteria are available at the project repository") and points readers to the authoritative per-dimension scoring data.
+This document records the methodology used in the compliance analysis presented in Section 5 of the VIDS v1.0 paper (Muthu and Shalen, 2026, arXiv:2604.17525). It addresses the reference in footnote 1 of Section 5.3 ("Per dimension scoring criteria are available at the project repository") and points readers to the published per-dimension scoring data.
 
 ## 1. Status
 
