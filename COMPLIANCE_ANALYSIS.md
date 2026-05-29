@@ -1,8 +1,6 @@
-# VIDS Compliance Analysis: Methodology and Per-Dataset Results
+# VIDS Compliance Analysis: Methodology Reference
 
-This document records the methodology used in the compliance analysis presented in Section 5 of the VIDS v1.0 paper (Muthu and Shalen, 2026, arXiv:2604.17525). It is the canonical reference for any reader wishing to interpret, reproduce, or extend the published Table 4 scores.
-
-This document fulfills the reference promised in footnote 1 of Section 5.3 of the paper ("Per dimension scoring criteria are available at the project repository").
+This document records the methodology used in the compliance analysis presented in Section 5 of the VIDS v1.0 paper (Muthu and Shalen, 2026, arXiv:2604.17525). It addresses the reference in footnote 1 of Section 5.3 ("Per dimension scoring criteria are available at the project repository") and points readers to the authoritative per-dimension scoring data.
 
 ## 1. Status
 
@@ -19,7 +17,7 @@ The two frameworks coexist for different purposes:
 | Profile thresholds | Not defined (research analysis did not use profile thresholds) | POC 16/22, Full 22/22 |
 | Used in | arXiv paper Table 4 | Buyer evaluation reports, compliance attestations |
 
-Both frameworks remain in use. The research methodology is the documented source for the published Table 4 results. The operational rubric is the framework used for any new compliance evaluation going forward. The two scores produced by the two frameworks for the same dataset will not be numerically equivalent.
+Both frameworks remain in use. The research methodology is the documented source for the published Table 4 results. The operational rubric is the framework used for any new compliance evaluation going forward. Scores produced by the two frameworks for the same dataset will not be numerically equivalent.
 
 ## 2. The framework used in the paper
 
@@ -36,8 +34,6 @@ Section 5.1 of the paper defines 22 dimensions across six categories. Table 3 fr
 | Quality (2) | Inter annotator agreement, quality summary |
 | ML Readiness (2) | Documented splits, split rationale |
 
-Each dimension is defined by the structure it requires in a compliant dataset, derived from the VIDS specification. For example, the Provenance "annotation tool" dimension asks whether the dataset documents, in structured machine-readable form, the software tool used to produce each annotation.
-
 ### 2.2 Scoring model
 
 From Section 5.1 of the paper, verbatim:
@@ -52,15 +48,19 @@ Each dimension produces one of three scores:
 
 The category total is the sum of dimension scores within that category. The total score is the sum of category totals.
 
-### 2.3 Profile thresholds
+### 2.3 Per-dimension scoring data
 
-The 22-dimension framework does not define profile thresholds. The POC and Full profile thresholds referenced elsewhere in the paper (15 rules for POC, 21 rules for Full) apply to the 21-rule reference validator described in Section 3.4, not to the 22-dimension compliance analysis.
+The per-dimension scoring data for all four datasets is published as a structured artifact:
 
-The relationship between the 21 validator rules and the 22 dimensions is described in the paper: 21 of the 22 dimensions correspond to machine-enforceable validator rules, with the 22nd dimension (split rationale documentation) being a content-quality dimension that the validator does not check directly. Readers should not expect a one-to-one numeric mapping between rule outcomes and dimension scores.
+[github.com/vids-standard/vids-benchmarks/blob/main/data/compliance_scores.json](https://github.com/vids-standard/vids-benchmarks/blob/main/data/compliance_scores.json)
+
+That file contains the dimension definitions (with descriptions), the scoring scale, and per-dataset scores for all 22 dimensions across the four datasets in Table 4. The verification script in the same repository (`verify_scores.py`) reproduces the category totals and per-dataset percentages from the JSON.
+
+Each dimension's score for each dataset is determined by applying the dimension definition to the dataset's published artifacts under the scoring model in Section 2.2 above. The published JSON contains the scores; it does not separately document per-cell narrative rationale. A reader can verify or extend any individual cell by applying the dimension definition to the corresponding dataset and arriving at one of {1.0, 0.5, 0.0}.
 
 ## 3. Per-dataset results
 
-### 3.1 Table 4 reproduced verbatim
+Table 4 from the paper, reproduced verbatim:
 
 | Category | LIDC-IDRI | BraTS | CheXpert | MSD | VIDS native |
 |---|---|---|---|---|---|
@@ -73,57 +73,13 @@ The relationship between the 21 validator rules and the 22 dimensions is describ
 | Total (22) | 6.0 | 8.5 | 4.5 | 6.5 | 22 |
 | Percentage | 27% | 39% | 20% | 30% | 100% |
 
-### 3.2 Per-category observations
+The per-dimension breakdown producing these category totals is in `compliance_scores.json` (linked above). The Section 5.4 narrative in the paper describes the key findings at the category level.
 
-The category-level scoring is constrained by the observations in Section 5.4 of the paper, quoted below for each category. Per-dimension scoring (which specific dimensions within a category received satisfied, partial, or absent scores for each dataset) is not separately published in the paper. The category total constrains the number of partial and full credits awarded within the category, and the Section 5.4 narrative further constrains which dimensions those credits map to, but the full per-dimension breakdown is not documented in the published material.
+## 4. Relationship to the validator rules
 
-**Structure (max 6):**
+The 22-dimension compliance framework and the 21-rule reference validator described in Section 3.4 of the paper are distinct instruments. The paper does not establish a canonical numeric mapping between dimension scores and rule outcomes; readers should not expect them to correspond one-to-one.
 
-> All four datasets have some directory organization and imaging data in standardized formats, but none use a machine readable dataset marker, structured participant registry, or per image metadata sidecar.
-
-This constrains three of the six Structure dimensions (dataset marker, participant registry, per-image sidecar relevance) to score 0 for all four datasets. The remaining three dimensions (dataset description, README, subject/session hierarchy) account for the partial and full credits visible in the category totals (1.5 to 2.0 across the four datasets). The exact per-dimension assignment within these three is not separately documented.
-
-**Imaging (max 3):**
-
-> All four datasets have ... imaging data in standardized formats.
-
-The Standardized format dimension is satisfied or partially satisfied across all four datasets. Per-image metadata sidecars are not provided in standardized form by any of the four. Score variation across datasets (1.0 to 2.0) reflects differences in the third dimension (consistent file naming). The exact per-dimension assignment is not separately documented.
-
-**Annotation (max 4):**
-
-The paper does not provide an Annotation-specific narrative in Section 5.4. Category totals (LIDC 1.5, BraTS 2.0, CheXpert 1.0, MSD 2.0) reflect varying degrees of annotation directory structure and segmentation file availability. The lower CheXpert score is consistent with CheXpert's NLP-derived classification labels (no segmentation masks present), under the framework's segmentation-mask dimension. The exact per-dimension assignment is not separately documented.
-
-**Provenance (max 5):**
-
-> Provenance is the largest gap. Across all four datasets, the provenance category averaged 0.4/5 (8%). LIDC-IDRI documents its annotation protocol in the original publication but anonymizes individual reader identities and provides no per annotation tool or date metadata in machine readable form. BraTS, CheXpert, and MSD provide no per annotation provenance at all.
-
-LIDC's 1.0 corresponds to partial credit on 2 of 5 dimensions. One partial credit maps to "annotation protocol documented in companion paper" per the Section 5.4 quote. The source of the second partial credit is not specifically identified in the paper and is most consistent with one of: annotator credentials (LIDC's original publication describes the radiologist panel composition), QC review (LIDC's two-phase blinded review is documented in the original publication), or a related dimension. The paper does not single out which.
-
-BraTS's 0.5 reflects partial credit on 1 of 5 dimensions. The specific dimension is not identified in the paper. CheXpert and MSD score 0 across all 5 dimensions.
-
-**Quality (max 2):**
-
-> LIDC-IDRI and BraTS have inter annotator agreement data that is computable from the raw annotations or published in challenge papers, but neither provides it as a structured file within the dataset itself. CheXpert and MSD provide no quality documentation.
-
-LIDC and BraTS each score 1.0 on Quality, corresponding to partial credit (0.5) on both dimensions (Inter-annotator agreement and Quality summary): information is present in published material but not in structured form within the dataset. CheXpert and MSD score 0.
-
-**ML Readiness (max 2):**
-
-> MSD, BraTS, and CheXpert provide predefined splits, though documentation of split rationale and leakage prevention varies. LIDC-IDRI provides no predefined splits.
-
-BraTS, CheXpert, and MSD each score 1.0 on the Documented splits dimension. Split rationale documentation is not credited for any of the four datasets (Score 0 on the second dimension across all). LIDC scores 0 across both dimensions.
-
-## 4. Reproducing or extending the analysis
-
-A reader wishing to verify a specific cell of Table 4 should:
-
-1. Apply the dimension definitions from Section 2.1 to the corresponding dataset's published artifacts (dataset README, official documentation, companion papers, structured metadata files).
-2. For each dimension within the category, determine satisfied, partial, or absent using the scoring model in Section 2.2.
-3. Sum the dimension scores. The result should match the category total in Table 4.
-
-The constraints from Section 3.2 narrow the within-category dimension assignments substantially. Where per-dimension assignment remains ambiguous within a category total, the paper does not document a single canonical choice. Readers performing independent verification should produce category totals matching Table 4 and report any cells where their per-dimension assignment differs from this document's constraints.
-
-For new datasets not in Table 4, the same procedure produces a comparable score. Note that ongoing operational evaluations use the [Scoring Rubric](https://vidsstandard.org/for-buyers/scoring-rubric/), which has different category structure, dimension counts, and a binary scoring model. Scores from the two frameworks are not directly comparable.
+The POC and Full profile thresholds (15 rules for POC, 21 rules for Full) referenced elsewhere in the paper apply to the 21-rule validator, not to the 22-dimension compliance analysis. The 22-dimension framework does not define profile thresholds.
 
 ## 5. Citation
 
@@ -141,7 +97,7 @@ If citing the research methodology, reference both the paper and this document:
 }
 
 @misc{vids2026compliance,
-  title   = {VIDS Compliance Analysis: Methodology and Per-Dataset Results},
+  title   = {VIDS Compliance Analysis: Methodology Reference},
   author  = {{Princeton Medical Systems}},
   year    = {2026},
   url     = {https://github.com/vids-standard/vids-standard/blob/main/COMPLIANCE_ANALYSIS.md}
@@ -154,4 +110,4 @@ This document is published under CC BY 4.0, matching the VIDS specification lice
 
 ---
 
-**Version note**: This document was published after the v1.0 paper to fulfill the footnote reference to per-dimension scoring criteria. Any future compliance analysis publications using the 22-dimension research framework should reference this document for methodology. Operational compliance evaluations use the separate [Scoring Rubric](https://vidsstandard.org/for-buyers/scoring-rubric/) and are out of scope for this document.
+**Version note**: This document addresses the reference in footnote 1 of the paper's Section 5.3. The per-dimension scoring data is in [vids-benchmarks](https://github.com/vids-standard/vids-benchmarks). Operational compliance evaluations use the separate [Scoring Rubric](https://vidsstandard.org/for-buyers/scoring-rubric/) and are out of scope for this document.
