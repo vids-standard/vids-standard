@@ -41,7 +41,7 @@ A dataset is compliant if it has zero FAIL rules.
 
 ## Metadata rule (D\*)
 
-- D001: `CHANGES.md` exists; missing is WARN (recommended).
+- D001: `CHANGES.md` exists; missing is WARN (recommended). SKIP under the POC profile.
 
 ## Conformance Boundary
 
