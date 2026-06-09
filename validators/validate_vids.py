@@ -372,6 +372,9 @@ class VIDSValidator:
 
     # ── Metadata Rules ──────────────────────────────────────
     def check_changes_file(self):
+        if self.profile != 'full':
+            self._skip('D001', 'POC profile — CHANGES.md optional (recommended)')
+            return
         if (self.dataset_path / 'CHANGES.md').exists():
             self._pass('D001', 'CHANGES.md present')
         else:
@@ -398,7 +401,7 @@ class VIDSValidator:
 
         return {
             'VIDSVersion': '1.0',
-            'ValidatorVersion': '1.2',
+            'ValidatorVersion': '1.2.1',
             'DatasetPath': str(self.dataset_path),
             'Profile': self.profile,
             'ValidationDate': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
