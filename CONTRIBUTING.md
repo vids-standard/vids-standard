@@ -28,7 +28,7 @@ Use descriptive titles and include enough context to reproduce the issue.
 
 1. Fork the repository and create a branch from `main`.
 2. Make your changes to `validators/validate_vids.py`.
-3. Verify both example datasets still pass: `python validators/validate_vids.py examples/poc` and `python validators/validate_vids.py examples/full --profile full`.
+3. Regenerate the fixtures with `python tests/generate_test_fixtures.py`, then verify both still pass: `python validators/validate_vids.py tests/fixtures/example-poc` and `python validators/validate_vids.py tests/fixtures/example-full --profile full`.
 4. Submit a pull request with a clear description of the change.
 
 **Documentation changes** (typos, clarifications, new examples):
@@ -97,6 +97,8 @@ VIDS follows semantic versioning for both the specification and the validator:
 ### Backward Compatibility Guarantee
 
 Datasets valid under VIDS 1.0 will remain valid under all VIDS 1.x validators. Breaking changes require a major version increment, a documented migration path, and a 90-day deprecation notice.
+
+**Erratum (2026-07-09).** "Valid" means conformant to the specification, not merely passing under a given validator build. A dataset that passed only because a prior validator under-enforced a REQUIRED annotation-sidecar field is not protected by this guarantee. See SPEC.md §15.3.
 
 ### Validator Versioning
 

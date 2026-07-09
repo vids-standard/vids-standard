@@ -107,10 +107,10 @@ You should see:
   ✅ A004: 3 annotation JSONs valid
   ✅ A005: All annotations have complete provenance
 
-  ✅ VALIDATION PASSED (16/21 rules)
+  ✅ VALIDATION PASSED (15/21 rules)
 ```
 
-16 rules pass, 5 are skipped (those are Full profile only — quality docs and ML splits).
+15 rules pass, 6 are skipped. Q001-Q003 and M001-M002 are Full profile only (quality docs and ML splits), and D001 (`CHANGES.md`) is skipped under POC.
 
 ## Step 4: Replace the placeholders with your real data (10 minutes)
 

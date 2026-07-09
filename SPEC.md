@@ -53,7 +53,7 @@ VIDS is built on five principles:
 
 1. **Provenance is mandatory, not optional.** Every annotation must document who created it, when, with what tool, and under what quality controls. This is not metadata — it is a first-class requirement.
 
-2. **Validation is automated.** Compliance is determined by running a validator, not by reading a checklist. If the validator passes, the dataset is compliant.
+2. **Validation is automated.** Compliance is determined by running a validator, not by reading a checklist. The reference validator is an implementation of this specification. Where the two diverge, the specification governs and the validator is corrected; a validator release that begins enforcing a REQUIRED field it had previously overlooked is a conformance correction, not a new requirement.
 
 3. **The standard is format-agnostic at delivery.** VIDS defines a canonical internal structure. Datasets curated in VIDS can be exported to any downstream format (nnU-Net, MONAI, COCO, flat NIfTI) without loss of provenance.
 
@@ -948,10 +948,10 @@ VIDS compliance is verified by the VIDS Validator (`validate_vids.py`), which en
 | Rule | Check | Requirement |
 |------|-------|-------------|
 | **A001** | `derivatives/annotations/` directory exists | REQUIRED |
-| **A002** | At least one segmentation file (`*_seg.nii.gz`) exists in annotations tree | REQUIRED |
-| **A003** | At least one annotation sidecar JSON (`*_seg.json`) exists | REQUIRED |
-| **A004** | All annotation sidecar JSONs are valid JSON and contain `VIDSVersion` field | REQUIRED |
-| **A005** | Provenance fields populated: `Annotator.ID` or `Annotator.Name`, and `AnnotationProcess.Date` or `AnnotationProcess.Tool` | REQUIRED |
+| **A002** | At least one annotation file exists in the annotations tree, across the spec-defined suffixes: `*_seg.nii.gz`, `*_seg.nii`, `*_cls.json`, `*_bbox.json`, `*_lm.json`, `*_roi.json` | REQUIRED |
+| **A003** | Every binary annotation file (`*_seg.nii.gz`, `*_seg.nii`) has its paired sidecar JSON. JSON-only annotation files are sidecars themselves and satisfy this rule | REQUIRED |
+| **A004** | All annotation sidecar JSONs, across all annotation types, are valid JSON and contain `VIDSVersion` field | REQUIRED |
+| **A005** | Provenance fields populated on all annotation sidecars: `Annotator.ID` or `Annotator.Name`, and `AnnotationProcess.Date` or `AnnotationProcess.Tool` | REQUIRED |
 
 ### 14.4 Quality Rules (Q001–Q003) — Full Profile Only
 
@@ -968,11 +968,11 @@ VIDS compliance is verified by the VIDS Validator (`validate_vids.py`), which en
 | **M001** | `ml/` directory exists | REQUIRED (Full) |
 | **M002** | `ml/splits.json` exists | REQUIRED (Full) |
 
-### 14.6 Metadata Rules (D001) — All Profiles
+### 14.6 Metadata Rules (D001) — Full Profile Only
 
 | Rule | Check | Requirement |
 |------|-------|-------------|
-| **D001** | `CHANGES.md` exists | WARNING |
+| **D001** | `CHANGES.md` exists | WARNING (Full). SKIP under POC |
 
 ### 14.7 Validation Outcomes
 
@@ -1011,6 +1011,8 @@ Datasets SHOULD use semantic versioning in `dataset_description.json`:
 
 - Datasets created under VIDS 1.0 MUST remain valid under VIDS 1.x validators.
 - Breaking changes require a major version increment and a documented migration path.
+
+**Erratum (2026-07-09).** The guarantee above protects datasets that conform to this specification. It does not protect a dataset that passed only because an earlier validator failed to enforce a field this specification already marks REQUIRED. Validator v1.2.0 began enforcing `VIDSVersion` and `Provenance` on every annotation sidecar, as §10.1 has required since VIDS 1.0. Datasets carrying a `_bbox`, `_cls`, `_lm`, or `_roi` sidecar without those fields passed under validator 1.1.x and fail under 1.2.x. This is a conformance correction for previously under-enforced REQUIRED annotation-sidecar fields. It produced new FAIL outcomes, and that was not stated at the v1.2.0 release.
 
 ---
 

@@ -191,13 +191,13 @@ standards@vidsstandard.org
 | I003 Imaging JSON valid | PASS |
 | I004 Naming convention | PASS |
 | A001 `derivatives/annotations/` | PASS |
-| A002 Segmentation files | PASS |
-| A003 Annotation sidecars | PASS |
+| A002 Annotation file present | PASS |
+| A003 Binary annotation has paired sidecar | PASS |
 | A004 Annotation JSON valid + `VIDSVersion` | PASS |
 | A005 Provenance complete | PASS |
 | Q001–Q003 | SKIP (POC) |
 | M001–M002 | SKIP (POC) |
-| D001 `CHANGES.md` | WARN (recommended) |
+| D001 `CHANGES.md` | SKIP (POC) |
 
 ---
 

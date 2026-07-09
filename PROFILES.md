@@ -25,7 +25,7 @@ Validator coverage: all 21 checks, including Q001–Q003 and M001–M002.
 | `sub-*` + `ses-*` structure | Required | Required |
 | Imaging + imaging sidecars | Required | Required |
 | `derivatives/annotations/` | Required | Required |
-| Segmentation files + sidecars | Required | Required |
+| Annotation files (any spec suffix) + required sidecars | Required | Required |
 | Provenance minimums | Required | Required |
 | `quality/` + required JSONs | Optional | Required |
 | `ml/` + `splits.json` | Optional | Required |
