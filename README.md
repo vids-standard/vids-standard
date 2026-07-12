@@ -67,7 +67,7 @@ python vids-standard/tools/vids_init.py my-dataset --subjects 10 --modality ct -
 
 # Validate
 vids-validate my-dataset/
-# ✅ VALIDATION PASSED (16/21 rules)
+# ✅ VALIDATION PASSED (15/21 rules)
 ```
 
 Replace the NIfTI stubs with your real imaging data, fill in the JSON templates, validate again. See [QUICKSTART.md](QUICKSTART.md) for the full walkthrough.
@@ -152,7 +152,7 @@ Available as a [PyPI package](https://pypi.org/project/vids-validator/) and as a
 | Annotation (A001–A005) | 5 | All profiles |
 | Quality (Q001–Q003) | 3 | Full only |
 | ML (M001–M002) | 2 | Full only |
-| Metadata (D001) | 1 | All (WARN) |
+| Metadata (D001) | 1 | Full only (WARN) |
 
 **Compliant** = zero FAIL rules. That's the only test.
 

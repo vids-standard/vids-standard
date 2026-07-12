@@ -1,5 +1,33 @@
 # Changes
 
+## Errata
+
+### 2026-07-09 — re: [v1.2], A004 / A005
+
+The v1.2 entry below describes the A004 and A005 changes as "generalized." That
+wording understates their effect and is corrected here.
+
+Prior to v1.2, A004 and A005 inspected only `*_seg.json`. From v1.2 they inspect
+every annotation sidecar across all five spec-defined suffixes. SPEC §10.1 has
+marked `VIDSVersion` and `Provenance` **REQUIRED** on every annotation sidecar
+since VIDS 1.0, so v1.2 brought the validator into conformance with the
+specification. It was a **validator conformance correction for previously
+under-enforced REQUIRED annotation-sidecar fields**, and it is ratified as the
+intended architecture.
+
+It also produced **new FAIL outcomes**, which the original entry did not state.
+A dataset carrying a `_bbox`, `_cls`, `_lm`, or `_roi` sidecar without
+`VIDSVersion` or a conformant `Provenance` block passes under validator 1.1.x
+and fails under 1.2.x.
+
+No published VIDS dataset is affected. LIDC-Hybrid-100 is segmentation-only and
+validates 21/21 under 1.2.1. The IDRiD fundus reference implementation validates
+15/21 PASS under 1.2.1.
+
+See SPEC.md §15.3 and the Backward Compatibility Guarantee in CONTRIBUTING.md.
+
+---
+
 ## [v1.2] — 2026-05-20
 
 Validator and scaffolding tool both extended to cover all five spec-defined

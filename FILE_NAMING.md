@@ -9,7 +9,8 @@ VIDS uses BIDS-inspired `sub-` and `ses-` prefixes and sidecar JSON pairing conv
 ## Required pairs
 
 - `*_img.nii.gz` (or `.nii`) MUST have `*_img.json`.
-- `*_seg.nii.gz` (or `.nii`) SHOULD have `*_seg.json` and is REQUIRED for validator compliance where segmentation is used.
+- `*_seg.nii.gz` (or `.nii`) MUST have `*_seg.json`.
+- JSON-only annotation files (`*_cls.json`, `*_bbox.json`, `*_lm.json`, `*_roi.json`) are their own sidecars and require no paired NIfTI.
 
 ## Common suffixes
 
