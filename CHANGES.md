@@ -45,7 +45,10 @@ reference to any affected field.
   `Created` and `LastModified`; placeholders remain present so A004 and A005 still
   pass.
 - CI: `continue-on-error` removed from the unit-test step. A failing test now fails
-  the build.
+  the build. Removing it revealed that the workflow had no step installing `pytest`,
+  so the unit-test step had been failing on every run since it was added and the
+  flag was masking it. An install step is added; the tests now genuinely execute in
+  CI for the first time.
 
 ### What did not change
 
