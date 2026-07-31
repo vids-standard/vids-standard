@@ -7,7 +7,7 @@
 | **Drafted** | 2026-07-12 |
 | **Adopted** | 2026-07-26 |
 | **Maintained by** | Steering Committee (Princeton Medical Systems) |
-| **Related** | CONTRIBUTING.md; SPEC.md; MD-0001; MD-0002; SOP-Governance-Decision-Lifecycle |
+| **Related** | CONTRIBUTING.md; SPEC.md; MD-0001; MD-0002; MD-0005; SOP-Governance-Decision-Lifecycle |
 
 This document defines how VIDS classifies the documents it produces, which of them may create requirements, and where authority for each lives. It is a charter document: it defines the classification system rather than being classified by it.
 
@@ -134,15 +134,38 @@ The **`REG-DOC`** index lists every Layer 1 artifact with its ID, title, status,
 | SOP | Ops | Ops owns |
 | REG | Tooling | CI validation where implemented; registry drift treated as a build failure |
 
+### Steering Committee membership
+
+The current composition of the Steering Committee is recorded through Maintainer Decisions (MDs). Appointments, resignations, and removals are recorded by subsequent MDs, each applying from its stated effective date.
+
+| Member | Role | Recorded by |
+|--------|------|-------------|
+| Dr. Joan S. Muthu | Co-Founder and CTO | MD-0005 |
+| John Shalen R. | Co-Founder and COO | MD-0005 |
+| John Xavier | Co-Founder and Head of US and Global Operations | MD-0005 |
+
+All Steering Committee members hold governance signatory authority. This section is the charter's record of composition; it is descriptive of the MDs that establish it, and is updated when a subsequent MD changes membership.
+
 ## 8. Enforcement
 
-This taxonomy is **filing, not enforcement.** Naming a document "SPEC" does not keep it true. What keeps the normative layer honest is the automated tie between SPEC and the validator - `check_docs.py` (doc rule-counts and descriptions must match the validator) and `check_requirements.py` (every enforced requirement names a real FAIL-severity rule; no orphan rules; no unresolved CONFLICT) - and, for registries, CI validation (where implemented) that treats drift from the inventoried artifact as a build failure.
+This taxonomy is **filing, not enforcement.** Naming a document "SPEC" does not keep it true. What is meant to keep the normative layer honest is an automated tie between SPEC and the validator, and this section states plainly how much of that tie exists today.
 
-Consequently: **adding document types must not add drift surface.** Any normative claim is trustworthy only to the extent a check can verify it against the artifact. The taxonomy rides on top of these checks; it does not substitute for them. Structurally: *every statement in the project has a defined authority, and every authoritative statement is checkable against the thing it describes.*
+**In place.** Continuous integration runs on every push and pull request to `main`, across three Python versions. It generates the test fixtures, runs the validator against the POC and Full example datasets, and runs the validator unit tests.
+
+**Planned, not yet built.** Two checks are intended and do not exist in the repository:
+
+| Check | Intended scope |
+|-------|----------------|
+| `check_docs.py` | Rule counts and rule descriptions in the documentation must match the validator. |
+| `check_requirements.py` | Every enforced requirement names a real FAIL-severity rule; no orphan rules; no unresolved CONFLICT. |
+
+**Known gap.** The unit-test step currently runs with `continue-on-error`, so a failing test does not fail the build. Until that changes, tests in this repository report rather than enforce, including any test written to enforce an adopted governance rule. Registry drift is likewise not yet treated as a build failure.
+
+Consequently: **adding document types must not add drift surface.** Any normative claim is verifiable only to the extent a check can test it against the artifact, and a claim whose check is planned rather than built is not yet verifiable. The taxonomy rides on top of these checks; it does not substitute for them, and it does not substitute for building them. Structurally: *every statement in the project has a defined authority, and every authoritative statement is checkable against the thing it describes.*
 
 ## 9. Amending this document
 
-`GOVERNANCE.md` is a charter document. It is amended by Steering Committee consensus, following the same review discipline as a spec change. Adoption of the model it describes is recorded in **MD-0002**.
+`GOVERNANCE.md` is a charter document. It is amended by Steering Committee consensus, following the same review discipline as a spec change. Adoption of the model it describes is recorded in **MD-0002**. Steering Committee composition and signatory authority are recorded in **MD-0005**, and change only by a subsequent MD taking effect from its stated effective date.
 
 ---
 
@@ -151,5 +174,7 @@ Consequently: **adding document types must not add drift surface.** Any normativ
 | Date | Change |
 |------|--------|
 | 2026-07-12 | Initial draft (charter and taxonomy), submitted for adoption via MD-0002. |
+| 2026-07-29 | Section 8 corrected: `check_docs.py` and `check_requirements.py` were described as operational enforcement but do not exist in the repository. They are now listed as planned, the checks actually running in CI are stated, and the non-blocking unit-test step is recorded as a known gap. "Trustworthy" replaced with "verifiable". No change to the Normative Principle or the taxonomy. |
+| 2026-07-28 | Steering Committee membership provision added to Section 7, recording composition and the MD-based membership rule per MD-0005 clauses 2, 3 and 4. Section 9 and the Related field reference MD-0005. No change to the two-layer model, the Normative Principle, or any artifact-type definition. |
 | 2026-07-26 | Adopted following acceptance of MD-0002 by Joan S. Muthu and John Shalen R. (evidence: MD-0002-ApprovalEvidence-2026-07-26.pdf). |
 | 2026-07-26 | Pre-adoption revisions: date-field convention applied (Drafted; Adopted date added on acceptance); MD acceptance-record convention added to Section 6 per the Governance Decision Lifecycle SOP; REG derivative rule added to Section 4; punctuation normalized (em-dashes removed). No change to the two-layer model, the Normative Principle, or any artifact-type definition. |
