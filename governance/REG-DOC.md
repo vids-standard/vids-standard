@@ -10,7 +10,7 @@
 | **Drafted** | 2026-07-13 |
 | **Active since** | 2026-07-26 |
 | **Maintained by** | Ops (tooling); CI-validated where implemented |
-| **Related** | GOVERNANCE.md Section 6; MD-0002; SOP-Governance-Decision-Lifecycle |
+| **Related** | GOVERNANCE.md Section 6; MD-0002; MD-0005; SOP-Governance-Decision-Lifecycle |
 
 ---
 
@@ -26,6 +26,9 @@ This registry lists the governing **Layer 1 project artifacts** of VIDS, so anyo
 | MD-0002 | Adoption of the VIDS Document Taxonomy | Accepted (2026-07-26) | Public | `/governance/MD-0002.md` |
 | MD-0003 | Reference-Implementation Publication Policy (Metadata Layer, Not Images) | Accepted (2026-07-26) | Public | `/governance/MD-0003.md` |
 | MD-0004 | Adoption of the VIDS Governance Handbook v1.0 | Accepted (2026-07-26) | Public | `/governance/MD-0004.md` |
+| MD-0005 | Steering Committee Composition and Signatory Authority | Accepted (2026-07-28) | Public | `/governance/MD-0005.md` |
+| MD-0006 | Assertion Discipline for VIDS Artifacts and Generators | Accepted (2026-07-31) | Public | `/governance/MD-0006.md` |
+| MD-0007 | DeIdentification Semantics in SPEC Section 8.2 | Accepted (2026-07-31) | Public | `/governance/MD-0007.md` |
 | CN-0001 | Validator v1.2.x Annotation-Sidecar Enforcement | Published | Public | `/governance/CN-0001.md` |
 | REG-REQ | Requirements Registry (§3.2 traceability) | Planned ² | Public | `/registry/REG-REQ.yaml` |
 | REG-DOC | VIDS Artifact Index (this document) | Active | Public | `/governance/REG-DOC.md` |
@@ -43,6 +46,7 @@ This registry lists the governing **Layer 1 project artifacts** of VIDS, so anyo
 - **Layer 0 charter documents** (`README`, `GOVERNANCE.md`, `CONTRIBUTING.md`, `LICENSE`, `NOTICE`) are intentionally **not** indexed here. They define the taxonomy rather than being classified by it (GOVERNANCE.md §2).
 - The Fundus 1.0 publication checklist (`publication/ZENODO-CHECKLIST-fundus-1.0.md`) is rolling operational material, not a governing Layer 1 artifact, so it is not indexed here (same treatment as the status note).
 - The first registered SOP is the Governance Handbook (Active per MD-0004). Further operational material (release checklist, identity-discipline routine) remains candidate for future SOP entries.
+- **Proposed MDs are indexed before they are filed.** An MD appears here on proposal so the pending set is discoverable, with its status shown as Proposed. Its target location is recorded, but the file is not committed to `/governance/` until acceptance. A Proposed MD in the repository would imply a status it does not hold.
 - A **`Supersedes`** column is planned - to be added when governance history first requires it (e.g., when one MD supersedes another) - so tooling can navigate lineage. It is omitted now because there is no supersession to record.
 
 ## Change log
@@ -50,6 +54,9 @@ This registry lists the governing **Layer 1 project artifacts** of VIDS, so anyo
 | Date | Change |
 |------|--------|
 | 2026-07-13 | Initial draft. |
+| 2026-07-31 | MD-0006 and MD-0007 advanced to Accepted (2026-07-31) and filed to `/governance/`. |
+| 2026-07-29 | MD-0006 and MD-0007 added (Proposed), covering assertion discipline and DeIdentification semantics. |
+| 2026-07-28 | MD-0005 added (Accepted 2026-07-28), recording Steering Committee composition and signatory authority. |
 | 2026-07-26 | Active per adoption of MD-0002. Statuses advanced: MD-0001, MD-0002, MD-0003 Accepted; MD-0004 added (Accepted); Governance Handbook registered as the first SOP (Active per MD-0004); Governance Decision Lifecycle SOP listed as working practice. Punctuation normalized. |
 
 ---
