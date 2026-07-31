@@ -65,7 +65,7 @@ def zero_pad(n, total):
     return str(n).zfill(width)
 
 
-def _placeholder_provenance(date_str):
+def _placeholder_provenance():
     """Return a populated-but-placeholder provenance block for JSON-only annotation scaffolds.
 
     Uses TODO_ prefixes so scaffolded values are obviously not real but the
@@ -81,7 +81,7 @@ def _placeholder_provenance(date_str):
         "AnnotationProcess": {
             "Tool": "TODO: annotation tool",
             "ToolVersion": "TODO: tool version",
-            "Date": date_str,
+            "Date": "TODO: annotation date",
             "Method": "TODO: annotation method"
         }
     }
@@ -219,7 +219,7 @@ TODO: Add citation guidance
                     "VIDSVersion": "1.0",
                     "SourceFormat": "TODO: DICOM | NIfTI | NRRD | Other",
                     "ConversionTool": "TODO: e.g., dcm2niix v1.0.20240202",
-                    "ConversionDate": today,
+                    "ConversionDate": "TODO",
                     "AcquisitionParameters": {
                         "SliceThickness_mm": "TODO",
                         "PixelSpacing_mm": "TODO: [x, y]",
@@ -230,7 +230,7 @@ TODO: Add citation guidance
                     "DeIdentification": {
                         "Method": "TODO: HIPAA Safe Harbor | Expert Determination",
                         "Tool": "TODO",
-                        "Date": today,
+                        "Date": "TODO",
                         "VerifiedBy": "TODO"
                     }
                 })
@@ -260,7 +260,7 @@ TODO: Add citation guidance
                             "AnnotationProcess": {
                                 "Tool": "TODO: e.g., 3D Slicer",
                                 "ToolVersion": "TODO: e.g., 5.6.2",
-                                "Date": today,
+                                "Date": "TODO",
                                 "TimeSpent_minutes": "TODO",
                                 "Method": "TODO: Manual segmentation | Semi-automated | Automated with review"
                             },
@@ -277,7 +277,7 @@ TODO: Add citation guidance
                         "AnnotationType": "classification",
                         "SourceImage": f"{stem}_img.nii.gz",
                         "Classifications": [],
-                        "Provenance": _placeholder_provenance(today)
+                        "Provenance": _placeholder_provenance()
                     })
                 elif ann_type == 'bbox':
                     write_json(ann_dir / f"{stem}_bbox.json", {
@@ -286,7 +286,7 @@ TODO: Add citation guidance
                         "SourceImage": f"{stem}_img.nii.gz",
                         "CoordinateSystem": "voxels",
                         "BoundingBoxes": [],
-                        "Provenance": _placeholder_provenance(today)
+                        "Provenance": _placeholder_provenance()
                     })
                 elif ann_type == 'lm':
                     write_json(ann_dir / f"{stem}_lm.json", {
@@ -295,7 +295,7 @@ TODO: Add citation guidance
                         "SourceImage": f"{stem}_img.nii.gz",
                         "CoordinateSystem": "voxels",
                         "Landmarks": [],
-                        "Provenance": _placeholder_provenance(today)
+                        "Provenance": _placeholder_provenance()
                     })
                 elif ann_type == 'roi':
                     write_json(ann_dir / f"{stem}_roi.json", {
@@ -303,7 +303,7 @@ TODO: Add citation guidance
                         "AnnotationType": "roi",
                         "SourceImage": f"{stem}_img.nii.gz",
                         "Regions": [],
-                        "Provenance": _placeholder_provenance(today)
+                        "Provenance": _placeholder_provenance()
                     })
 
                 file_count += 4 if ann_type == 'seg' else 3
@@ -320,7 +320,7 @@ TODO: Add citation guidance
             "Profile": "full",
             "DatasetName": dataset_name,
             "DatasetVersion": "1.0.0",
-            "QualityAssessmentDate": today,
+            "QualityAssessmentDate": "TODO",
             "AnnotationStatistics": {
                 "TotalSubjects": n_subjects,
                 "TotalAnnotations": "TODO",
@@ -337,9 +337,7 @@ TODO: Add citation guidance
                     "DoubleAnnotationPercentage": "TODO: e.g., 10",
                     "ReviewMethod": "TODO"
                 }
-            },
-            "CertificationStatement": "TODO",
-            "CertifiedBy": {"Name": "TODO", "Role": "TODO", "Date": today}
+            }
         })
         print(f"  ✅ quality/quality_summary.json")
 
