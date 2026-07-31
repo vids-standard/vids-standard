@@ -28,7 +28,7 @@ Use descriptive titles and include enough context to reproduce the issue.
 
 1. Fork the repository and create a branch from `main`.
 2. Make your changes to `validators/validate_vids.py`.
-3. Verify both example datasets still pass: `python validators/validate_vids.py examples/poc` and `python validators/validate_vids.py examples/full --profile full`.
+3. Regenerate the fixtures with `python tests/generate_test_fixtures.py`, then verify both still pass: `python validators/validate_vids.py tests/fixtures/example-poc` and `python validators/validate_vids.py tests/fixtures/example-full --profile full`. Run the unit tests with `python -m pytest tests/`.
 4. Submit a pull request with a clear description of the change.
 
 **Documentation changes** (typos, clarifications, new examples):
@@ -64,7 +64,7 @@ The full governance model, including the artifact taxonomy (SPEC, MD, CN, SOP, R
 
 ### Project Roles
 
-**Steering Committee** - Responsible for reviewing and merging pull requests, deciding on spec changes and version increments, and managing releases and the canonical URL (vidsstandard.org). The Steering Committee currently consists of Princeton Medical Systems, the original authors of VIDS. As the community grows, additional seats will be added to ensure representation from academic, clinical, and industry stakeholders.
+**Steering Committee** - Responsible for reviewing and merging pull requests, deciding on spec changes and version increments, and managing releases and the canonical URL (vidsstandard.org). Current composition is recorded in GOVERNANCE.md Section 7 and established by Maintainer Decision; it is not restated here, so there is one place to read it and one place to change it. All members hold governance signatory authority. As the community grows, additional seats will be added to ensure representation from academic, clinical, and industry stakeholders.
 
 **Maintainers** - Individuals with merge access to the repository. All current Steering Committee members are maintainers. External contributors can become maintainers (see below).
 
@@ -102,6 +102,8 @@ VIDS follows semantic versioning for both the specification and the validator:
 
 Datasets valid under VIDS 1.0 will remain valid under all VIDS 1.x validators. Breaking changes require a major version increment, a documented migration path, and a 90-day deprecation notice.
 
+**Erratum (2026-07-09).** "Valid" means conformant to the specification, not merely passing under a given validator build. A dataset that passed only because a prior validator under-enforced a REQUIRED annotation-sidecar field is not protected by this guarantee. See SPEC.md Section 15.3.
+
 ### Validator Versioning
 
 The validator tracks its own version independently from the spec. The validator version is reported in its JSON output (`ValidatorVersion` field). Validator updates that don't change rule behavior are patch increments; new rules or changed pass/fail logic are minor or major increments.
@@ -121,6 +123,7 @@ Be professional and constructive. We're building a standard for medical AI - the
 
 | Date | Change |
 |------|--------|
+| 2026-07-31 | Steering Committee composition removed from Project Roles and cross-referenced to GOVERNANCE.md Section 7, per MD-0005. Two regressions against `main` corrected before merge: the contributor verification step had been changed to `examples/poc` and `examples/full`, which do not exist in the repository, and the 2026-07-09 backward-compatibility erratum had been dropped. Both restored, and the unit-test run added to the verification step. No change to the contribution process, decision thresholds, or versioning rules. |
 | 2026-07-26 | Canonical URL corrected to vidsstandard.org (retired domain removed); contact email updated to standards@vidsstandard.org; conformance vocabulary applied; governance section cross-referenced to GOVERNANCE.md and the artifact taxonomy; Advisory Council added to project roles; punctuation normalized. No change to the contribution process, decision thresholds, or versioning rules. |
 
 ---
