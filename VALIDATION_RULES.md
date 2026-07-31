@@ -57,4 +57,4 @@ A VIDS PASS therefore asserts that the dataset satisfies the machine-checkable r
 - extension fields are semantically validated beyond their documented structure;
 - reported quality metrics, including Dice scores or pass-rate values, are independently recomputed or plausible.
 
-Extension fields may be present and useful for downstream review, procurement, or audit workflows, but their presence in a VIDS-valid dataset should not be interpreted as VIDS validation of their clinical or scientific truth.
+Extension fields may be present and useful for downstream review or procurement workflows, but their presence in a VIDS-valid dataset should not be interpreted as VIDS validation of their clinical or scientific truth.

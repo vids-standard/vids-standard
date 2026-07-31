@@ -1,12 +1,12 @@
 # VIDS — Verified Imaging Dataset Standard
 
-## Specification v1.0
+## Specification v1.0.1
 
 | Field | Value |
 |-------|-------|
-| **Version** | 1.0 |
+| **Version** | 1.0.1 |
 | **Status** | Release |
-| **Date** | 2026-02-16 |
+| **Date** | 2026-07-31 (v1.0.1); 2026-02-16 (v1.0) |
 | **Authors** | Princeton Medical Systems |
 | **License** | CC BY 4.0 (Specification/Docs) / Apache-2.0 (Tools) |
 | **Canonical URL** | https://vidsstandard.org/specification/ |
@@ -470,12 +470,16 @@ The imaging sidecar captures acquisition parameters and image quality assessment
 
   "DeIdentification": {
     "Method": "HIPAA Safe Harbor | Expert Determination | Other",
-    "Tool": "dcm2niix | CTP | pydicom | manual",
+    "Tool": "CTP | pydicom | manual",
     "Date": "YYYY-MM-DD",
     "VerifiedBy": "Name or ID"
   }
 }
 ```
+
+`DeIdentification` records the de-identification act. `Tool` names the tool that performed that act, and only that tool. Format conversion is a separate act, recorded in `ConversionTool`; a conversion utility is not named here even where the format change incidentally drops header fields. Where de-identification was performed upstream, the recorded `Method`, `Tool` and `Date` are the source's, at the granularity the source provides.
+
+**Erratum (2026-07-31).** The `Tool` candidate list previously read `dcm2niix | CTP | pydicom | manual`. `dcm2niix` is a format converter and does not perform de-identification; it has been removed, and the paragraph above states the field's scope. Worked examples pairing `Method: HIPAA Safe Harbor` with `Tool: dcm2niix` were corrected in the same release. Recorded under MD-0007. `DeIdentification` fields are RECOMMENDED and are not validated, so no dataset's conformance outcome changes.
 
 **Required fields within sidecar:** `VIDSVersion`. All other fields are RECOMMENDED.
 
@@ -806,12 +810,11 @@ Summarizes overall dataset quality. Key fields:
       "RulesFailed": 0,
       "ValidationStatus": "PASS"
     }
-  },
-
-  "CertificationStatement": "...",
-  "CertifiedBy": { "Name": "...", "Role": "...", "Date": "..." }
+  }
 }
 ```
+
+**Erratum (2026-07-31).** This example previously carried `CertificationStatement` and `CertifiedBy` beneath `ValidationResults`. VIDS verifies that documentation is present and structured; it does not certify a dataset. Those fields also appeared in the scaffolding generator and have been removed from both locations. Recorded under MD-0006. No validation rule referenced them, so no dataset's conformance outcome changes.
 
 ### 11.2 `quality/annotation_agreement.json`
 
@@ -1239,10 +1242,10 @@ vids_version: 1.0
 
 ```bibtex
 @misc{vids2026,
-  title   = {VIDS: Verified Imaging Dataset Standard, Specification v1.0},
+  title   = {VIDS: Verified Imaging Dataset Standard, Specification v1.0.1},
   author  = {{Princeton Medical Systems}},
   year    = {2026},
-  version = {1.0},
+  version = {1.0.1},
   url     = {https://vidsstandard.org/specification/}
 }
 ```

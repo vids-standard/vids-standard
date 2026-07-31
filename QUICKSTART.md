@@ -151,7 +151,7 @@ Edit `sub-001/ses-baseline/ct/sub-001_ses-baseline_ct_img.json`:
   },
   "DeIdentification": {
     "Method": "HIPAA Safe Harbor",
-    "Tool": "dcm2niix",
+    "Tool": "CTP",
     "Date": "2026-03-28",
     "VerifiedBy": "data_curator_001"
   }
