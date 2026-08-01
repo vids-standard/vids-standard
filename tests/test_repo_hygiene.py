@@ -1,27 +1,28 @@
 #!/usr/bin/env python3
 """
-Enforcement tests for the governance rule prohibiting unreviewable artifacts
-in reviewed paths.
+Enforcement tests for the standing operating routine prohibiting unreviewable
+artifacts in reviewed paths.
 
-The rule: any file that cannot be read as a diff in review must not sit in a
+The routine: any file that cannot be read as a diff in review must not sit in a
 path where review is the control. Either it is generated at distribution time,
 or CI regenerates it and fails on divergence.
 
-The rule further states that CI must not push commits back to a protected
+The routine further states that CI must not push commits back to a protected
 branch to satisfy it. These tests therefore fail the build; they do not
 regenerate or delete anything.
 
-The rule also names a specific hazard: a repository PDF sitting beside a
+The routine also names a specific hazard: a repository PDF sitting beside a
 record whose sign-off cites `MD-NNNN-ApprovalEvidence-YYYY-MM-DD.pdf` is a
 file a reader could mistake for the executed signature copy. The executed
 instrument is held outside this repository and cited by filename only.
 
-The rule is a standing operating routine and is not yet registered as a
-numbered SOP artifact in REG-DOC. It is therefore referred to here by
-description rather than by an identifier that would not resolve. When it is
-registered, replace these references with the SOP ID in one pass.
+The routine is SOP-class operating practice, not a normative rule: no adopted
+decision created it, and it creates no dataset conformance requirement. It is
+not yet registered as a numbered SOP artifact in REG-DOC, so it is referred to
+here by description rather than by an identifier that would not resolve. When
+it is registered, replace these references with the SOP ID in one pass.
 
-Without these tests the rule is a statement of intent. Eight rendered PDFs
+Without these tests the routine is a statement of intent. Eight rendered PDFs
 accumulated in `main` before it was applied, and the divergence they caused
 was invisible to review precisely because a binary artifact is opaque to a
 diff.
@@ -37,7 +38,7 @@ import pytest
 
 REPO_ROOT = Path(__file__).parent.parent
 
-RULE = "no unreviewable artifacts in a reviewed path"
+ROUTINE = "no unreviewable artifacts in a reviewed path"
 
 # Rendered document formats. Each duplicates a canonical source, cannot be
 # reviewed as a diff, and carries the signature-copy hazard when it lands
@@ -62,8 +63,8 @@ EXCLUDED_COMPONENTS = {
 # Tracked binaries permitted by explicit exception. Empty by design: the
 # repository contains none.
 #
-# The rule provides no exception path. An entry here therefore admits a file
-# the rule excludes, which is a scope call and belongs in a Maintainer
+# The routine provides no exception path. An entry here therefore admits a
+# file the routine excludes, which is a scope call and belongs in a Maintainer
 # Decision rather than in a code review. Cite the MD beside any entry added.
 PERMITTED_BINARIES: set = set()
 
@@ -72,7 +73,7 @@ PERMITTED_BINARIES: set = set()
 # Machine-readable derivatives are permitted alongside them. GOVERNANCE.md
 # Section 4 anticipates them explicitly ("REG-DOC.json ... script-generated
 # derivatives with a divergence-failing verifier"), and that shape is the
-# second remedy the rule allows: generated, with CI failing on divergence.
+# second remedy the routine allows: generated, with CI failing on divergence.
 # Rendered documents remain blocked here by the repository-wide rule above.
 GOVERNANCE_DIR = "governance"
 GOVERNANCE_PERMITTED_SUFFIXES = {".md", ".json", ".yaml", ".yml"}
@@ -121,7 +122,7 @@ def test_no_rendered_documents_in_repository(tracked):
         and str(p) not in PERMITTED_BINARIES
     ]
     assert not offences, (
-        f"Governance rule ({RULE}): rendered documents cannot be read as a "
+        f"Standing routine ({ROUTINE}): rendered documents cannot be read as a "
         "diff and must not sit in a reviewed path. Generate them at "
         "distribution time instead:\n  " + "\n  ".join(sorted(offences))
     )
@@ -145,7 +146,7 @@ def test_governance_records_are_markdown_only(tracked):
 def test_no_signature_copy_lookalike(tracked):
     """No file in the repository can be mistaken for executed evidence.
 
-    Guards the specific hazard the rule names. The executed instrument lives
+    Guards the specific hazard the routine names. The executed instrument lives
     outside the repository and is cited by filename only, so a file bearing
     that name here is either a duplicate or a leak.
     """
@@ -154,7 +155,7 @@ def test_no_signature_copy_lookalike(tracked):
         if APPROVAL_EVIDENCE_PATTERN.search(p.name)
     ]
     assert not offences, (
-        f"Governance rule ({RULE}): a repository file a reader could mistake "
+        f"Standing routine ({ROUTINE}): a repository file a reader could mistake "
         "for the executed signature copy. Executed evidence is held outside "
         "this repository and cited by filename only:\n  "
         + "\n  ".join(sorted(offences))
@@ -181,7 +182,7 @@ def test_no_undiffable_binaries_tracked(tracked):
         except (UnicodeDecodeError, ValueError):
             offences.append(str(p))
     assert not offences, (
-        f"Governance rule ({RULE}): file is not reviewable as a diff. Either "
+        f"Standing routine ({ROUTINE}): file is not reviewable as a diff. Either "
         "generate it at distribution time, or add it to PERMITTED_BINARIES "
         "under a Maintainer Decision:\n  " + "\n  ".join(sorted(offences))
     )
