@@ -31,6 +31,22 @@ Thumbs.db
 *.zip
 *.tar.gz
 
+# Rendered documents (SOP Section 7.3)
+# Records are the source; renderings are generated at distribution time.
+# This is convenience only. The control is tests/test_repo_hygiene.py, which
+# fails the build for anything already tracked or added with -f.
+*.pdf
+*.doc
+*.docx
+*.ppt
+*.pptx
+*.xls
+*.xlsx
+*.odt
+*.odp
+*.ods
+*.rtf
+
 # NIfTI test stubs (don't commit large binary files)
 # Real datasets should use Git LFS or external storage
 tests/fixtures/
