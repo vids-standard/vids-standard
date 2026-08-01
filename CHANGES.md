@@ -1,5 +1,65 @@
 # Changes
 
+## [v1.0.1 specification] — 2026-07-31
+
+Patch release under SPEC §15.1 (clarifications, typo fixes, example corrections).
+No dataset-conformance requirement changes; no validation rule changes; no
+dataset's PASS or FAIL outcome changes. Verified against the shipped validator
+`vids_validator-1.2.1` (MD5 32462465a70eaf8c0025e40b8ec6c400), which contains no
+reference to any affected field.
+
+### Specification (`SPEC.md`)
+
+- **§8.2.** `dcm2niix` removed from the `DeIdentification.Tool` candidate list. It
+  is a format converter and does not perform de-identification. A paragraph now
+  states that `Tool` names the tool of the de-identification act only, that
+  conversion is a separate act recorded in `ConversionTool`, and that upstream
+  de-identification stays attributed to the source. Recorded under **MD-0007**.
+- **§11.1.** `CertificationStatement` and `CertifiedBy` removed from the
+  `quality_summary.json` example and the scaffolding generator. VIDS verifies that
+  documentation is present and structured; it does not certify a dataset. Recorded
+  under **MD-0006**.
+
+### Documentation
+
+- `EXAMPLES.md` and `QUICKSTART.md`: `DeIdentification.Tool` corrected from
+  `dcm2niix` to `CTP`. Both examples retain `ConversionTool: dcm2niix`, so each now
+  shows the two acts recorded in their own fields.
+- `EXAMPLES.md`: certification block removed.
+- `VALIDATION_RULES.md`: "audit" removed from the Conformance Boundary sentence.
+
+### Scaffolding (`tools/vids_init.py`)
+
+- Certification fields removed.
+- Five provenance dates that named acts the generator does not perform now emit
+  placeholders: `ConversionDate`, `DeIdentification.Date`, `AnnotationProcess.Date`,
+  the `_placeholder_provenance` helper, and `QualityAssessmentDate`. `Created` and
+  `LastModified` are unchanged; the generator does perform those acts. Recorded
+  under **MD-0006** Rule 2.
+
+### Test infrastructure (`tests/`)
+
+- `test_assertion_discipline.py` added: five tests enforcing MD-0006. No
+  outcome-claim field in any scaffolded JSON; annotator `Credentials` survive; no
+  date on a field naming a foreign act; no occurrence of today's date outside
+  `Created` and `LastModified`; placeholders remain present so A004 and A005 still
+  pass.
+- CI: `continue-on-error` removed from the unit-test step. A failing test now fails
+  the build. Removing it revealed that the workflow had no step installing `pytest`,
+  so the unit-test step had been failing on every run since it was added and the
+  flag was masking it. An install step is added; the tests now genuinely execute in
+  CI for the first time.
+
+### What did not change
+
+`ConversionTool: dcm2niix` throughout, annotator credentials including
+"Board-certified" wherever they appear, the Backward Compatibility Guarantee, the
+requirement level of any `DeIdentification` subfield (all RECOMMENDED), and the
+nine `"VIDSVersion": "1.0"` values in examples, which remain the value the shipped
+validator emits and every conformant dataset declares.
+
+---
+
 ## Errata
 
 ### 2026-07-09 — re: [v1.2], A004 / A005

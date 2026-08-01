@@ -112,7 +112,7 @@ standards@vidsstandard.org
   },
   "DeIdentification": {
     "Method": "HIPAA Safe Harbor",
-    "Tool": "dcm2niix",
+    "Tool": "CTP",
     "Date": "2026-02-10",
     "VerifiedBy": "data_curator_001"
   }
@@ -340,12 +340,6 @@ Same as POC examples above.
       "RulesFailed": 0,
       "ValidationStatus": "PASS"
     }
-  },
-  "CertificationStatement": "This dataset meets VIDS Full profile requirements.",
-  "CertifiedBy": {
-    "Name": "Data Quality Lead",
-    "Role": "QC Manager",
-    "Date": "2026-02-16"
   }
 }
 ```

@@ -21,6 +21,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Install test dependencies
+        run: python -m pip install --upgrade pip pytest
+
       - name: Generate example datasets
         run: python tests/generate_test_fixtures.py
 
@@ -32,4 +35,3 @@ jobs:
 
       - name: Run validator unit tests
         run: python -m pytest tests/ -v --tb=short
-        continue-on-error: true
