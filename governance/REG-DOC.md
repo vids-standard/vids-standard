@@ -46,6 +46,7 @@ This registry lists the governing **Layer 1 project artifacts** of VIDS, so anyo
 - **Layer 0 charter documents** (`README`, `GOVERNANCE.md`, `CONTRIBUTING.md`, `LICENSE`, `NOTICE`) are intentionally **not** indexed here. They define the taxonomy rather than being classified by it (GOVERNANCE.md §2).
 - The Fundus 1.0 publication checklist (`publication/ZENODO-CHECKLIST-fundus-1.0.md`) is rolling operational material, not a governing Layer 1 artifact, so it is not indexed here (same treatment as the status note).
 - The first registered SOP is the Governance Handbook (Active per MD-0004). Further operational material (release checklist, identity-discipline routine) remains candidate for future SOP entries.
+- **Records are Markdown only.** Rendered PDFs of governance records are not committed. A rendering cannot be read as a diff, so it cannot sit in a path where review is the control, and a repository PDF sitting beside a record that cites `MD-NNNN-ApprovalEvidence-YYYY-MM-DD.pdf` is a file a reader could mistake for the signature copy. Renderings are generated at distribution time. Executed approval evidence is held outside the repository and cited by filename only.
 - **Proposed MDs are indexed before they are filed.** An MD appears here on proposal so the pending set is discoverable, with its status shown as Proposed. Its target location is recorded, but the file is not committed to `/governance/` until acceptance. A Proposed MD in the repository would imply a status it does not hold.
 - A **`Supersedes`** column is planned - to be added when governance history first requires it (e.g., when one MD supersedes another) - so tooling can navigate lineage. It is omitted now because there is no supersession to record.
 
@@ -54,6 +55,7 @@ This registry lists the governing **Layer 1 project artifacts** of VIDS, so anyo
 | Date | Change |
 |------|--------|
 | 2026-07-13 | Initial draft. |
+| 2026-07-31 | Rendered governance PDFs removed per SOP Section 7.3; records are Markdown only and renderings are generated at distribution time. Registry contents unchanged. |
 | 2026-07-31 | MD-0006 and MD-0007 advanced to Accepted (2026-07-31) and filed to `/governance/`. |
 | 2026-07-29 | MD-0006 and MD-0007 added (Proposed), covering assertion discipline and DeIdentification semantics. |
 | 2026-07-28 | MD-0005 added (Accepted 2026-07-28), recording Steering Committee composition and signatory authority. |
