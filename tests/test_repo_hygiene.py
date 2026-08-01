@@ -74,7 +74,7 @@ PERMITTED_BINARIES: set = set()
 # Section 4 anticipates them explicitly ("REG-DOC.json ... script-generated
 # derivatives with a divergence-failing verifier"), and that shape is the
 # second remedy the routine allows: generated, with CI failing on divergence.
-# Rendered documents remain blocked here by the repository-wide rule above.
+# Rendered documents remain blocked here by the repository-wide check above.
 GOVERNANCE_DIR = "governance"
 GOVERNANCE_PERMITTED_SUFFIXES = {".md", ".json", ".yaml", ".yml"}
 
