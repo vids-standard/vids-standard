@@ -924,7 +924,7 @@ VIDS defines two compliance profiles. The profile is declared in the `.vids` mar
 
 ## 14. Validation Rules
 
-VIDS compliance is verified by the VIDS Validator (`validate_vids.py`), which enforces 21 rules organized into 6 categories.
+VIDS compliance is verified by the VIDS Validator (`validators/validate_vids.py`), which enforces 21 rules organized into 6 categories.
 
 ### 14.1 Structure Rules (S001–S006) — All Profiles
 
