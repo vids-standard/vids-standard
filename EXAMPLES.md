@@ -1,6 +1,6 @@
 # VIDS Example Datasets (v1.0)
 
-This document contains complete, minimal example datasets for both VIDS profiles. Every file shown here passes the reference validator (`validate_vids.py`). NIfTI files (`.nii.gz`) are binary and cannot be inlined — placeholder stubs are noted where they belong.
+This document contains complete, minimal example datasets for both VIDS profiles. Every file shown here passes the reference validator (`validators/validate_vids.py`). NIfTI files (`.nii.gz`) are binary and cannot be inlined — placeholder stubs are noted where they belong.
 
 ---
 
@@ -431,4 +431,4 @@ Same as POC examples above.
 
 - **Binary stubs:** The `.nii.gz` files are not represented here. When generating a testable dataset, create minimal NIfTI files (e.g., a 2×2×2 voxel volume using nibabel or similar).
 - **Reuse:** POC and Full share the same imaging sidecar, annotation sidecar, and participants file. The Full profile adds `quality/`, `ml/`, and `CHANGES.md`.
-- **Validator command:** `python validate_vids.py example-poc` and `python validate_vids.py example-full --profile full`.
+- **Validator command:** `python validators/validate_vids.py example-poc` and `python validators/validate_vids.py example-full --profile full`.

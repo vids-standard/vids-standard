@@ -108,6 +108,12 @@ Datasets valid under VIDS 1.0 will remain valid under all VIDS 1.x validators. B
 
 The validator tracks its own version independently from the spec. The validator version is reported in its JSON output (`ValidatorVersion` field). Validator updates that don't change rule behavior are patch increments; new rules or changed pass/fail logic are minor or major increments.
 
+### Release Tags
+
+Git tags in this repository mark **validator** releases, in the form `vX.Y.Z`. The specification is not Git-tagged: it is identified by the version in its own header, by its entry in `CHANGES.md`, and by its archived DOI.
+
+The two version lines advance independently, so a specification version placed in the `vX.Y.Z` namespace would sort against validator releases and be read as one. A specification 1.0.1 tag, for instance, would sort below the validator's `v1.1.0` and appear to be an older release.
+
 ## Code of Conduct
 
 Be professional and constructive. We're building a standard for medical AI - the stakes are real. Assume good intent, provide evidence for claims, and focus on improving the standard rather than winning arguments.
@@ -123,6 +129,7 @@ Be professional and constructive. We're building a standard for medical AI - the
 
 | Date | Change |
 |------|--------|
+| 2026-08-04 | Release Tags subsection added, recording that Git tags mark validator releases and that the specification is identified by its version header, its CHANGES entry and its DOI rather than by a tag. Prospective only; no existing tag changes. |
 | 2026-07-31 | Steering Committee composition removed from Project Roles and cross-referenced to GOVERNANCE.md Section 7, per MD-0005. Two regressions against `main` corrected before merge: the contributor verification step had been changed to `examples/poc` and `examples/full`, which do not exist in the repository, and the 2026-07-09 backward-compatibility erratum had been dropped. Both restored, and the unit-test run added to the verification step. No change to the contribution process, decision thresholds, or versioning rules. |
 | 2026-07-26 | Canonical URL corrected to vidsstandard.org (retired domain removed); contact email updated to standards@vidsstandard.org; conformance vocabulary applied; governance section cross-referenced to GOVERNANCE.md and the artifact taxonomy; Advisory Council added to project roles; punctuation normalized. No change to the contribution process, decision thresholds, or versioning rules. |
 

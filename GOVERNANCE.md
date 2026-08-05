@@ -150,7 +150,9 @@ All Steering Committee members hold governance signatory authority. This section
 
 This taxonomy is **filing, not enforcement.** Naming a document "SPEC" does not keep it true. What is meant to keep the normative layer honest is an automated tie between SPEC and the validator, and this section states plainly how much of that tie exists today.
 
-**In place.** Continuous integration runs on every push and pull request to `main`, across three Python versions. It generates the test fixtures, runs the validator against the POC and Full example datasets, and runs the validator unit tests.
+**In place.** Continuous integration runs on every push and pull request to `main`, across three Python versions. It installs the test dependencies, generates the test fixtures, runs the validator against the POC and Full example datasets, and runs the test suite. A failing test fails the build.
+
+The suite includes tests that enforce adopted governance rules directly rather than describing them: `tests/test_assertion_discipline.py` checks that the scaffolding generator emits no outcome-claim field and no provenance date for an act it did not perform (MD-0006), and `tests/test_repo_hygiene.py` checks that no artifact which cannot be read as a diff sits in a reviewed path.
 
 **Planned, not yet built.** Two checks are intended and do not exist in the repository:
 
@@ -159,7 +161,9 @@ This taxonomy is **filing, not enforcement.** Naming a document "SPEC" does not 
 | `check_docs.py` | Rule counts and rule descriptions in the documentation must match the validator. |
 | `check_requirements.py` | Every enforced requirement names a real FAIL-severity rule; no orphan rules; no unresolved CONFLICT. |
 
-**Known gap.** The unit-test step currently runs with `continue-on-error`, so a failing test does not fail the build. Until that changes, tests in this repository report rather than enforce, including any test written to enforce an adopted governance rule. Registry drift is likewise not yet treated as a build failure.
+**Known gap.** Registry drift is not yet treated as a build failure. No check compares a registry against the artifacts it inventories, so REG-DOC accuracy currently rests on review.
+
+**Correction, 2026-08-04.** This section previously recorded that the unit-test step ran with `continue-on-error` and that tests therefore reported rather than enforced. That ceased to be true with the v1.0.1 release, which removed the flag under MD-0006. The same change revealed that the workflow had never installed `pytest`, so the step had been failing on every run and the flag was masking it; an install step was added in the same release. The superseded wording is preserved here rather than deleted, per the project's forward-only documentation practice.
 
 Consequently: **adding document types must not add drift surface.** Any normative claim is verifiable only to the extent a check can test it against the artifact, and a claim whose check is planned rather than built is not yet verifiable. The taxonomy rides on top of these checks; it does not substitute for them, and it does not substitute for building them. Structurally: *every statement in the project has a defined authority, and every authoritative statement is checkable against the thing it describes.*
 
@@ -174,6 +178,7 @@ Consequently: **adding document types must not add drift surface.** Any normativ
 | Date | Change |
 |------|--------|
 | 2026-07-12 | Initial draft (charter and taxonomy), submitted for adoption via MD-0002. |
+| 2026-08-04 | Section 8 corrected: the known gap recorded a non-blocking unit-test step, which ceased to be true with the v1.0.1 release. The checks now running are stated, including the two tests that enforce adopted governance rules, and the superseded wording is preserved in the section. Registry drift remains the one recorded gap. No change to the Normative Principle, the two-layer model, or any artifact-type definition. |
 | 2026-07-29 | Section 8 corrected: `check_docs.py` and `check_requirements.py` were described as operational enforcement but do not exist in the repository. They are now listed as planned, the checks actually running in CI are stated, and the non-blocking unit-test step is recorded as a known gap. "Trustworthy" replaced with "verifiable". No change to the Normative Principle or the taxonomy. |
 | 2026-07-28 | Steering Committee membership provision added to Section 7, recording composition and the MD-based membership rule per MD-0005 clauses 2, 3 and 4. Section 9 and the Related field reference MD-0005. No change to the two-layer model, the Normative Principle, or any artifact-type definition. |
 | 2026-07-26 | Adopted following acceptance of MD-0002 by Joan S. Muthu and John Shalen R. (evidence: MD-0002-ApprovalEvidence-2026-07-26.pdf). |

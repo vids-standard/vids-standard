@@ -55,6 +55,7 @@ This registry lists the governing **Layer 1 project artifacts** of VIDS, so anyo
 | Date | Change |
 |------|--------|
 | 2026-07-13 | Initial draft. |
+| 2026-08-04 | Citation correction. The 2026-07-31 entry cites "SOP Section 7.3"; no registered SOP contains that section. The removal it records was repository hygiene and stands as recorded. The earlier entry is unchanged. |
 | 2026-07-31 | Rendered governance PDFs removed per SOP Section 7.3; records are Markdown only and renderings are generated at distribution time. Registry contents unchanged. |
 | 2026-07-31 | MD-0006 and MD-0007 advanced to Accepted (2026-07-31) and filed to `/governance/`. |
 | 2026-07-29 | MD-0006 and MD-0007 added (Proposed), covering assertion discipline and DeIdentification semantics. |

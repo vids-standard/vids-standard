@@ -31,7 +31,7 @@ Thumbs.db
 *.zip
 *.tar.gz
 
-# Rendered documents (SOP Section 7.3)
+# Rendered documents (no unreviewable artifacts in reviewed paths)
 # Records are the source; renderings are generated at distribution time.
 # This is convenience only. The control is tests/test_repo_hygiene.py, which
 # fails the build for anything already tracked or added with -f.
