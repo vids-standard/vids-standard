@@ -60,6 +60,47 @@ validator emits and every conformant dataset declares.
 
 ---
 
+## [v1.2.1] — 2026-06-09
+
+Validator patch release. One behaviour change, one rule clarification, and
+documentation. No dataset that passed under v1.2.0 fails under v1.2.1.
+
+### Validator (`validators/validate_vids.py`)
+
+- **D001 scoping corrected.** The rule ran unconditionally, emitting PASS or
+  WARN under POC where it should have been skipped. `CHANGES.md` is
+  RECOMMENDED metadata belonging to the Full profile. D001 is now gated to
+  Full and reports SKIP under POC.
+- **The POC headline changes from 16/21 to 15/21.** The rule set is unchanged;
+  the earlier count included a rule that does not apply at that profile. A
+  spurious POC WARN is removed. Full is unaffected at 21/21.
+- `ValidatorVersion` reports `1.2.1` rather than `1.2`, so a report now
+  identifies the exact build that produced it.
+
+### Documentation
+
+- `VALIDATION_RULES.md`: A005 states that provenance fields must carry a
+  non-empty value. Empty strings, null values and missing fields do not
+  satisfy the rule, because the check tests for a populated value rather than
+  key presence. This records existing validator behaviour; no logic changed.
+- `VALIDATION_RULES.md`: **Conformance Boundary** section added. A VIDS PASS
+  asserts structural and documentation conformance, not the clinical,
+  scientific or statistical truth of the values reported in those artifacts.
+- `COMPLIANCE_ANALYSIS.md` added, documenting the research methodology behind
+  the published benchmark and pointing to `vids-benchmarks` for the scoring
+  data.
+- `SPEC.md`: canonical URL aligned with the rendered site at
+  `/specification/`.
+- `README.md`: links `COMPLIANCE_ANALYSIS.md` from the Paper section.
+
+### Compatibility
+
+No dataset moves from PASS to FAIL. A POC dataset without `CHANGES.md`
+previously drew a WARN and now draws a SKIP, which is the correct treatment
+for a rule outside the profile. All 26 tests pass.
+
+---
+
 ## Errata
 
 ### 2026-07-09 — re: [v1.2], A004 / A005
