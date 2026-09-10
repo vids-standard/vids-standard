@@ -4,13 +4,19 @@
 |-------|-------|
 | **ID** | REG-DOC |
 | **Type** | REG, Registry |
-| **Status** | Active, per adoption of MD-0002 (accepted 2026-07-26) |
-| **Normative?** | No. Authoritative for the *index of artifacts*, not for conformance. |
+| **Status** | Superseded per MD-0008, effective on merge of the adopting pull request. Retained for history; no longer maintained. |
+| **Normative?** | No. Was authoritative for the *index of artifacts*, not for conformance. |
 | **Visibility** | Public |
 | **Drafted** | 2026-07-13 |
-| **Active since** | 2026-07-26 |
-| **Maintained by** | Ops (tooling); CI-validated where implemented |
-| **Related** | GOVERNANCE.md Section 6; MD-0002; MD-0005; SOP-Governance-Decision-Lifecycle |
+| **Active** | 2026-07-26 until supersession per MD-0008 |
+| **Maintained by** | No longer maintained. The repository is the record (GOVERNANCE.md Section 16). |
+| **Related** | GOVERNANCE.md Section 16; MD-0002; MD-0008 |
+
+---
+
+**This registry is superseded.** Per MD-0008 and GOVERNANCE.md Section 16, the repository itself is the record of governing artifacts: the `/governance/` directory holds decision records, and commits, pull requests, and releases record their status. The content below is preserved as the registry's final state and is not updated.
+
+Two rows below were already known to be stale when the registry was superseded and are preserved as found: the SPEC row and footnote 1 state v1.0, while the specification on main at supersession was v1.0.1; the SPEC-FUNDUS row records a target location under `/extensions/fundus/` that is not yet present on main. Consult the repository, not this frozen index, for current state.
 
 ---
 
@@ -54,6 +60,7 @@ This registry lists the governing **Layer 1 project artifacts** of VIDS, so anyo
 
 | Date | Change |
 |------|--------|
+| 2026-09-07 | Marked Superseded per MD-0008. Final entry; the registry is no longer maintained. Registry contents below this point unchanged. |
 | 2026-07-13 | Initial draft. |
 | 2026-08-04 | Citation correction. The 2026-07-31 entry cites "SOP Section 7.3"; no registered SOP contains that section. The removal it records was repository hygiene and stands as recorded. The earlier entry is unchanged. |
 | 2026-07-31 | Rendered governance PDFs removed per SOP Section 7.3; records are Markdown only and renderings are generated at distribution time. Registry contents unchanged. |

@@ -1,138 +1,169 @@
 # Contributing to VIDS
 
-Thank you for your interest in improving the Verified Imaging Dataset Standard. This document explains how to contribute and how the project is governed.
+Thank you for helping improve the Verified Imaging Dataset Standard (VIDS).
 
-## How to Contribute
+VIDS is maintained as an open standard. We aim to keep contribution and review simple while giving changes that affect conformance appropriate review.
 
-### Reporting Issues
+## 1. Ways to Contribute
 
-Open a GitHub issue for:
+You can contribute by:
 
-- **Spec ambiguities** - wording that could be interpreted in conflicting ways
-- **Validator bugs** - cases where the validator produces incorrect PASS/FAIL/WARN results
-- **Missing modality support** - imaging modalities not covered by the current spec
-- **Documentation gaps** - missing examples, unclear instructions, broken links
+- reporting a specification ambiguity or documentation problem;
+- reporting a validator bug;
+- proposing an improvement to the specification;
+- proposing support for a new modality or annotation type;
+- improving examples or documentation;
+- contributing validator fixes or tests.
 
-Use descriptive titles and include enough context to reproduce the issue.
+Use GitHub issues when discussion would be useful before making a change. Otherwise, a pull request is sufficient.
 
-### Proposing Changes
+## 2. Pull Requests
 
-**Spec changes** (normative requirements, validation rules, JSON schemas):
+Keep pull requests focused on one logical change.
 
-1. Open a GitHub issue describing the proposed change and its rationale.
-2. Label it `spec-change`. The maintainers will assess impact and assign a milestone.
-3. If approved, submit a pull request against `SPEC.md` (and supporting docs if needed).
-4. All spec changes require at least one maintainer review before merge.
+A pull request should briefly explain:
 
-**Validator changes** (bug fixes, new checks, performance improvements):
+- what is changing;
+- why the change is needed; and
+- whether it affects VIDS conformance.
 
-1. Fork the repository and create a branch from `main`.
-2. Make your changes to `validators/validate_vids.py`.
-3. Regenerate the fixtures with `python tests/generate_test_fixtures.py`, then verify both still pass: `python validators/validate_vids.py tests/fixtures/example-poc` and `python validators/validate_vids.py tests/fixtures/example-full --profile full`. Run the unit tests with `python -m pytest tests/`.
-4. Submit a pull request with a clear description of the change.
+Avoid unrelated formatting or cleanup in the same pull request.
 
-**Documentation changes** (typos, clarifications, new examples):
+The pull request and repository history are the record of the change. Separate approval documents or signatures are not required.
 
-- Small fixes: submit a pull request directly.
-- Larger additions: open an issue first to discuss scope.
+## 3. Types of Changes
 
-### Adding Modality Support
+### Editorial Changes
 
-To propose a new modality code:
+Examples include:
 
-1. Open an issue titled `[Modality] <modality name>`.
-2. Include: proposed code (e.g., `oct`), full modality name, any domain-specific `Characteristics` fields, and an example annotation sidecar JSON.
-3. If accepted, the code is added to Appendix A and FILE_NAMING.md.
+- typo fixes;
+- broken links;
+- clearer wording that does not change a requirement;
+- example corrections;
+- formatting improvements.
 
-Custom modality codes can always be used immediately by documenting them in `dataset_description.json` under `CustomModalities` - formal addition to the spec just makes them standard.
+These changes may be merged by a maintainer without additional governance process.
 
-### Adding Framework Integrations
+### Specification Changes
 
-We welcome export/loader contributions for ML frameworks (nnU-Net, MONAI, TorchIO, Hugging Face datasets, etc.). These belong in a separate `vids-tools` package - not in this spec repository. Contact the maintainers to coordinate.
+A specification change affects or may affect the meaning of VIDS requirements.
 
-## Pull Request Guidelines
+Examples include:
 
-- One logical change per pull request.
-- Keep diffs minimal - don't reformat unrelated lines.
-- If your PR modifies `SPEC.md`, explain whether the change is normative (affects conformance) or editorial (clarification only).
-- If your PR modifies the validator, include before/after validation output for both example datasets.
-- All PRs require at least one maintainer approval.
+- adding or changing fields;
+- adding modality codes;
+- changing annotation requirements;
+- changing file or directory rules;
+- changing PASS, FAIL, or WARN expectations.
 
-## Governance
+Submit a pull request describing the proposed change and its conformance impact.
 
-The full governance model, including the artifact taxonomy (SPEC, MD, CN, SOP, REG) and the Normative Principle that only the Core Specification creates conformance requirements, is defined in GOVERNANCE.md. Governance decisions are recorded as Maintainer Decisions (MDs); adopter-facing impact of changes is recorded in Change Notes (CNs).
+A substantive specification change requires review by at least one other Steering Committee member before merge.
 
-### Project Roles
+### Major or Breaking Changes
 
-**Steering Committee** - Responsible for reviewing and merging pull requests, deciding on spec changes and version increments, and managing releases and the canonical URL (vidsstandard.org). Current composition is recorded in GOVERNANCE.md Section 7 and established by Maintainer Decision; it is not restated here, so there is one place to read it and one place to change it. All members hold governance signatory authority. As the community grows, additional seats will be added to ensure representation from academic, clinical, and industry stakeholders.
+Changes that could make an existing conformant dataset non-conformant, remove requirements, or materially alter the structure of VIDS require broader review.
 
-**Maintainers** - Individuals with merge access to the repository. All current Steering Committee members are maintainers. External contributors can become maintainers (see below).
+Examples include:
 
-**Contributors** - Anyone who submits an accepted issue or pull request. Listed in `CONTRIBUTORS.md` (created after the first external contribution).
+- new REQUIRED fields;
+- removal or material revision of existing requirements;
+- incompatible file or directory changes;
+- other breaking conformance changes.
 
-**Advisory Council** - Independent experts advising on strategy, clinical relevance, and adoption. The Council holds no normative vote and its members serve as individuals, not as representatives of their employers.
+These changes should first be discussed publicly through GitHub and receive a minimum 30-day comment period.
 
-**Community** - Anyone using VIDS, providing feedback, or building tools around it.
+Approval follows the decision rules in GOVERNANCE.md.
 
-### Path to Maintainership
+## 4. Validator Changes
 
-Active contributors who demonstrate sustained, high-quality contributions may be nominated as maintainers by any existing Steering Committee member. Criteria include: multiple accepted PRs across spec or tools, constructive participation in spec-change discussions, and demonstrated understanding of the VIDS design principles. Nominations are decided by Steering Committee consensus.
+The validator implements the VIDS Specification. It does not independently define VIDS requirements.
 
-### Decision Process
+If the validator and the specification disagree, the specification governs and the validator should be corrected.
 
-- **Editorial changes** (typos, clarifications, example improvements): merged by any maintainer.
-- **Minor spec changes** (new optional fields, new modality codes, new annotation suffixes): discussed in a GitHub issue, decided by Steering Committee consensus.
-- **Major spec changes** (new required fields, new validation rules, breaking changes): discussed in a GitHub issue with a minimum 30-day comment period, decided by Steering Committee consensus with consideration of community feedback.
+For validator changes:
 
-The long-term governance model is a VIDS Consortium with formal representation from academic institutions, clinical organizations, and industry adopters. The transition to consortium governance will be initiated once VIDS has active external maintainers and multiple independent implementations.
+1. make the change;
+2. add or update tests where appropriate;
+3. run the relevant test suite; and
+4. submit a pull request explaining the behavior being changed.
 
-## Versioning
+Changes that correct the validator to match an existing specification requirement do not require a specification change.
 
-VIDS follows semantic versioning for both the specification and the validator:
+Changes that introduce a new conformance requirement must first be reflected in the specification.
 
-### Specification
+A validator change that materially changes validation outcomes requires review by at least one other maintainer before merge.
 
-| Change Type | Version Increment | Examples |
-|------------|-------------------|---------|
-| **Major** (X.0.0) | Breaking changes | New required fields, removed rules, restructured directories |
-| **Minor** (1.X.0) | Backward-compatible additions | New optional fields, new modality codes, new annotation types |
-| **Patch** (1.0.X) | Editorial only | Typo fixes, clarifications, example corrections |
+## 5. New Modalities and Extensions
 
-### Backward Compatibility Guarantee
+New modality support or domain-specific extensions may be proposed through a GitHub issue or pull request.
 
-Datasets valid under VIDS 1.0 will remain valid under all VIDS 1.x validators. Breaking changes require a major version increment, a documented migration path, and a 90-day deprecation notice.
+Include enough information for maintainers to understand:
 
-**Erratum (2026-07-09).** "Valid" means conformant to the specification, not merely passing under a given validator build. A dataset that passed only because a prior validator under-enforced a REQUIRED annotation-sidecar field is not protected by this guarantee. See SPEC.md Section 15.3.
+- the modality or use case;
+- why existing VIDS fields are insufficient;
+- the proposed fields or conventions; and
+- an example where useful.
 
-### Validator Versioning
+Small backward-compatible additions can follow the normal specification-change process.
 
-The validator tracks its own version independently from the spec. The validator version is reported in its JSON output (`ValidatorVersion` field). Validator updates that don't change rule behavior are patch increments; new rules or changed pass/fail logic are minor or major increments.
+A separate formal proposal template is not required.
 
-### Release Tags
+## 6. Testing
 
-Git tags in this repository mark **validator** releases, in the form `vX.Y.Z`. The specification is not Git-tagged: it is identified by the version in its own header, by its entry in `CHANGES.md`, and by its archived DOI.
+Changes to validator behavior should include appropriate tests.
 
-The two version lines advance independently, so a specification version placed in the `vX.Y.Z` namespace would sort against validator releases and be read as one. A specification 1.0.1 tag, for instance, would sort below the validator's `v1.1.0` and appear to be an older release.
+Before merging validator changes, maintainers should confirm that relevant automated tests pass.
 
-## Code of Conduct
+Continuous integration is the primary automated check. Contributors do not need to create separate testing evidence documents when the required results are already recorded by GitHub and CI.
 
-Be professional and constructive. We're building a standard for medical AI - the stakes are real. Assume good intent, provide evidence for claims, and focus on improving the standard rather than winning arguments.
+## 7. Review and Approval
 
-## Contact
+VIDS uses a lightweight review model.
 
-- **GitHub Issues** - Preferred for all technical discussions
-- **Email** - standards@vidsstandard.org (for partnership or governance inquiries)
+- **Editorial and routine documentation changes:** may be merged by a maintainer.
+- **Substantive specification changes:** require review by at least one other Steering Committee member.
+- **Major or breaking changes:** follow the additional public-review and approval rules in GOVERNANCE.md.
+
+Routine contributions do not require formal votes, signatures, approval forms, or separate decision records.
+
+A Maintainer Decision is used only when there is a durable governance or policy decision worth recording separately.
+
+## 8. Versioning
+
+VIDS uses semantic versioning.
+
+- **Major:** breaking or incompatible changes.
+- **Minor:** backward-compatible additions.
+- **Patch:** editorial corrections and clarifications that do not change conformance.
+
+Specification and validator versions may advance independently.
+
+Existing VIDS 1.x datasets should remain conformant under later VIDS 1.x specifications unless the earlier result depended on a validator defect or under-enforcement of an existing requirement.
+
+Breaking specification changes require a major version and an appropriate migration path.
+
+## 9. Project Governance
+
+Only the VIDS Specification and its normative extensions define conformance requirements.
+
+Project governance, maintainer authority, and decision rules are defined in GOVERNANCE.md.
+
+Internal company processes, commercial activities, and implementation decisions do not become part of the VIDS standard unless they are adopted through the VIDS governance process.
+
+## 10. Community Conduct
+
+Be professional, constructive, and evidence-based.
+
+Disagreement is welcome. Focus discussion on improving the standard, its implementation, and its usefulness to adopters.
+
+## 11. Contact
+
+For technical questions, bug reports, and proposed changes, use GitHub issues or pull requests.
+
+For partnership or governance inquiries: [standards@vidsstandard.org](mailto:standards@vidsstandard.org)
 
 ---
 
-## Change log
-
-| Date | Change |
-|------|--------|
-| 2026-08-04 | Release Tags subsection added, recording that Git tags mark validator releases and that the specification is identified by its version header, its CHANGES entry and its DOI rather than by a tag. Prospective only; no existing tag changes. |
-| 2026-07-31 | Steering Committee composition removed from Project Roles and cross-referenced to GOVERNANCE.md Section 7, per MD-0005. Two regressions against `main` corrected before merge: the contributor verification step had been changed to `examples/poc` and `examples/full`, which do not exist in the repository, and the 2026-07-09 backward-compatibility erratum had been dropped. Both restored, and the unit-test run added to the verification step. No change to the contribution process, decision thresholds, or versioning rules. |
-| 2026-07-26 | Canonical URL corrected to vidsstandard.org (retired domain removed); contact email updated to standards@vidsstandard.org; conformance vocabulary applied; governance section cross-referenced to GOVERNANCE.md and the artifact taxonomy; Advisory Council added to project roles; punctuation normalized. No change to the contribution process, decision thresholds, or versioning rules. |
-
----
-
-**VIDS was created by Princeton Medical Systems and is maintained as an open community standard.**
+**VIDS was created by Princeton Medical Systems and is maintained as an open standard.**
