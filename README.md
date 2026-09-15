@@ -1,15 +1,15 @@
 # VIDS — Verified Imaging Dataset Standard
 
-[![VIDS Version](https://img.shields.io/badge/VIDS-v1.0-blue)](SPEC.md)
+[![VIDS Version](https://img.shields.io/badge/VIDS-v1.0.1-blue)](SPEC.md)
 [![PyPI](https://img.shields.io/pypi/v/vids-validator?prefix=v&label=pypi&color=blue)](https://pypi.org/project/vids-validator/)
 [![License: CC BY 4.0](https://img.shields.io/badge/Spec-CC%20BY%204.0-lightgrey)](LICENSE)
 [![License: Apache 2.0](https://img.shields.io/badge/Tools-Apache%202.0-green)](LICENSE-Apache-2.0.txt)
 [![Validator](https://img.shields.io/badge/validator-21%20rules-orange)](validators/validate_vids.py)
 [![CI](https://github.com/vids-standard/vids-standard/actions/workflows/ci.yml/badge.svg)](https://github.com/vids-standard/vids-standard/actions/workflows/ci.yml)
 
-**The compliance layer for medical imaging AI datasets.**
+**A machine-checkable documentation standard for medical imaging AI datasets.**
 
-VIDS enforces dataset structure, annotation provenance, and quality documentation with 21 machine-verifiable rules. Run the validator, get PASS or FAIL. No ambiguity, no checklists, no trust required.
+VIDS specifies what a dataset should document about its structure, annotation provenance, and quality, in a form a validator can check. The validator evaluates 21 rules, with each rule reporting PASS, FAIL, WARN, or SKIP.
 
 ```bash
 pip install vids-validator
@@ -22,11 +22,10 @@ vids-validate my-dataset/ --profile full
   ✅ A001–A005: Annotation + provenance    PASS
   ✅ Q001–Q003: Quality documentation      PASS
   ✅ M001–M002: ML readiness               PASS
+  ✅ D001: Metadata documentation          PASS
 
   ✅ VALIDATION PASSED (21/21 rules)
 ```
-
-**Validate before you train. Validate before you pay. Validate before you submit.**
 
 ---
 
@@ -36,7 +35,7 @@ vids-validate my-dataset/ --profile full
 Dr. Joan S. Muthu, John Shalen — Princeton Medical Systems
 [arXiv:2604.17525](https://arxiv.org/abs/2604.17525)
 
-Four major public datasets (LIDC-IDRI, BraTS, CheXpert, Medical Segmentation Decathlon) scored against 22 VIDS compliance dimensions. Average: 29%. Provenance: 8%. The paper presents the full spec design, the compliance analysis, and LIDC-Hybrid-100 — a 100-subject VIDS-compliant reference CT dataset published on [Zenodo](https://doi.org/10.5281/zenodo.19582717).
+Four major public datasets (LIDC-IDRI, BraTS, CheXpert, Medical Segmentation Decathlon) scored against 22 compliance dimensions used in the paper's analysis, which are broader than the 21 rules the validator enforces. Average: 29%. Provenance: 8%. The paper presents the full spec design, the compliance analysis, and LIDC-Hybrid-100, a 100-subject VIDS-compliant reference CT dataset published on [Zenodo](https://doi.org/10.5281/zenodo.19582717).
 
 Compliance analysis data: [vids-benchmarks](https://github.com/vids-standard/vids-benchmarks)
 Compliance analysis methodology: [COMPLIANCE_ANALYSIS.md](COMPLIANCE_ANALYSIS.md)
@@ -45,14 +44,14 @@ Compliance analysis methodology: [COMPLIANCE_ANALYSIS.md](COMPLIANCE_ANALYSIS.md
 
 ## Why VIDS?
 
-Medical imaging AI teams waste weeks untangling datasets that arrive as ZIP files full of unnamed NIfTIs and undocumented annotations. Nobody knows who annotated what, when, or whether anyone reviewed it. VIDS eliminates this:
+Medical imaging AI teams spend weeks untangling datasets that arrive as ZIP files full of unnamed NIfTIs and undocumented annotations. Who annotated what, when, and whether anyone reviewed it is often unrecorded. VIDS asks a dataset to document these things and makes the documentation checkable:
 
-- **Mandatory provenance** — every annotation records annotator identity, credentials, tool, date, and QC status
-- **Automated validation** — one command, 21 rules, PASS or FAIL
-- **Two profiles** — POC (15 rules) for pilots, Full (21 rules) for production and regulatory
-- **Format-agnostic export** — curate once in VIDS, export to nnU-Net, MONAI, COCO, or flat NIfTI without losing provenance
+- **Required provenance.** Every annotation sidecar identifies the annotator and records annotation-process provenance; credentials and QC documentation are supported as recommended provenance fields
+- **Automated validation.** One command, 21 machine-checkable rules, with PASS, FAIL, WARN, and SKIP outcomes
+- **Two profiles.** POC (15 rules) for pilots, Full (21 rules) for production work
+- **Interoperable structure.** VIDS preserves dataset-level documentation and provenance in a structured form that can accompany downstream transformations and framework-specific exports
 
-VIDS sits above DICOM and BIDS. DICOM handles image storage. BIDS handles neuroimaging research organization. VIDS handles the layer neither covers: annotated datasets with documented provenance and enforced compliance.
+DICOM handles image acquisition and storage. BIDS handles neuroimaging research organization. VIDS addresses a level neither covers: the dataset as a curated artifact, with documented annotation provenance and curation history. It complements both and replaces neither.
 
 ## Quick Start
 
@@ -62,11 +61,12 @@ VIDS sits above DICOM and BIDS. DICOM handles image storage. BIDS handles neuroi
 pip install vids-validator
 git clone https://github.com/vids-standard/vids-standard.git
 
-# Create a VIDS dataset skeleton — passes validation immediately
+# Create a VIDS dataset skeleton that passes validation immediately
 python vids-standard/tools/vids_init.py my-dataset --subjects 10 --modality ct --profile poc
 
 # Validate
 vids-validate my-dataset/
+# POC profile: 15 applicable rules pass; 6 Full-only rules are skipped
 # ✅ VALIDATION PASSED (15/21 rules)
 ```
 
@@ -114,7 +114,7 @@ my-dataset/
                     └── sub-001_ses-baseline_ct_seg.json      # Provenance sidecar
 ```
 
-Every annotation sidecar documents **who** annotated, **when**, **with what tool**, and **what QC was performed**:
+The provenance schema can document **who** annotated, **when**, **with what tool**, and **what QC was performed**:
 
 ```json
 {
@@ -126,13 +126,13 @@ Every annotation sidecar documents **who** annotated, **when**, **with what tool
 }
 ```
 
-This is not optional metadata. This is a first-class requirement. If the provenance is missing, the validator fails.
+Required provenance applies to both POC and Full profiles. If the required annotator and annotation-process provenance is missing, the validator fails.
 
 ## Specification
 
 | Document | What's in it |
 |----------|-------------|
-| [SPEC.md](SPEC.md) | Full specification (v1.0) — the canonical reference |
+| [SPEC.md](SPEC.md) | Full specification (v1.0.1). The canonical reference for core VIDS conformance requirements |
 | [VALIDATION_RULES.md](VALIDATION_RULES.md) | All 21 rules in one page |
 | [PROFILES.md](PROFILES.md) | POC vs Full profile comparison |
 | [FILE_NAMING.md](FILE_NAMING.md) | Naming conventions and modality codes |
@@ -154,17 +154,17 @@ Available as a [PyPI package](https://pypi.org/project/vids-validator/) and as a
 | ML (M001–M002) | 2 | Full only |
 | Metadata (D001) | 1 | Full only (WARN) |
 
-**Compliant** = zero FAIL rules. That's the only test.
+A dataset conforms when no rule fails. Conformance means the documentation the specification asks for is present and correctly structured. It is not a statement about data quality, annotation correctness, or fitness for any particular research, clinical or regulatory purpose.
 
 ## Relationship to Other Standards
 
-| Standard | What it handles | What it doesn't handle |
-|----------|----------------|----------------------|
-| **DICOM** | Image acquisition and storage | Annotation structure, provenance, quality docs |
-| **BIDS** | Neuroimaging research organization | Multi-modality annotation, automated validation |
-| **NIfTI** | Volumetric image file format | Dataset structure, metadata, provenance |
-| **COCO / VOC** | Detection annotation format | Medical imaging specifics, provenance, quality |
-| **VIDS** | All of the above for annotated medical imaging datasets | Model training, inference, deployment |
+| Standard | Primary role | VIDS distinction |
+|----------|-------------|------------------|
+| **DICOM** | Medical image acquisition, exchange and storage, including structured imaging objects | VIDS specifies dataset-level organization, annotation provenance and curation documentation |
+| **BIDS** | Standardized organization and validation of primarily research imaging datasets | VIDS focuses on curated medical imaging AI datasets, annotation provenance and associated quality documentation |
+| **NIfTI** | Volumetric image file format | VIDS adds dataset structure, metadata and provenance requirements |
+| **COCO / VOC** | General-purpose annotation representations | VIDS adds medical-imaging dataset structure, provenance and quality documentation |
+| **VIDS** | Dataset-level documentation and machine-checkable conformance | Does not assess model performance, clinical outcomes, bias or fitness for use |
 
 VIDS complements these standards. It doesn't replace any of them.
 
@@ -172,12 +172,18 @@ VIDS complements these standards. It doesn't replace any of them.
 
 | Tool | What it does | How to get it |
 |------|-------------|--------------|
-| **vids-validator** | 21-rule compliance check | `pip install vids-validator` |
+| **vids-validator** | 21-rule conformance check | `pip install vids-validator` |
 | **vids-init** | Scaffold a VIDS dataset in seconds | `python tools/vids_init.py my-dataset` |
+
+## Governance
+
+VIDS is maintained by a Steering Committee at Princeton Medical Systems under published governance. How decisions are made, who makes them, and where each decision is recorded is documented at [vidsstandard.org/governance](https://vidsstandard.org/governance/), including the full record of accepted governance decisions.
+
+The VIDS Specification and its normative extensions are the only sources of VIDS conformance requirements. The validator implements machine-checkable requirements from the Specification. Where the two disagree, the Specification governs, and the discrepancy is recorded and corrected.
 
 ## Contributing
 
-We welcome contributions — spec clarifications, validator improvements, new modality support, and framework integrations. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines and governance details.
+We welcome contributions: specification clarifications, validator improvements, new modality support, and framework integrations. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines and the change process.
 
 ## License
 
@@ -200,6 +206,6 @@ We welcome contributions — spec clarifications, validator improvements, new mo
 
 ---
 
-**VIDS was created by [Princeton Medical Systems](https://princetonmedicalsystems.com) and is maintained as an open community standard.**
+**VIDS was created and is maintained by [Princeton Medical Systems](https://princetonmedicalsystems.com) as an open standard, under the governance published at [vidsstandard.org/governance](https://vidsstandard.org/governance/).**
 
 **Contact:** standards@vidsstandard.org
